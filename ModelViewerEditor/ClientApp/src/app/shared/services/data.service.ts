@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
-import { ProjectModel } from "../models/project";
+import { ProjectModel } from "../models/projectModel";
 import { DataServiceResponse } from "./dataServiceResponse";
+import {Observable, of} from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -27,11 +28,10 @@ export class DataService {
 
   addProject(name: string, err: string = ""): DataServiceResponse {
     if (!name) {
-      return DataService.error("Project name not defined");
+      return DataService.error("Project name is empty");
     }
-
     const projects = this.getProjects();
-    if (projects.findIndex((x) => x.name == name)) {
+    if (projects.some((x) => x.name.trim().toLowerCase() == name.trim().toLowerCase())) {
       return DataService.error("Name in use");
     }
     const p = new ProjectModel();
@@ -40,11 +40,18 @@ export class DataService {
     return DataService.success();
   }
 
+  projectExists(name: string): Observable<boolean>{
+    const projects = this.getProjects();
+    console.log(projects.some((x) => x.name.trim().toLowerCase() == name.trim().toLowerCase()));
+    const result = (projects.some((x) => x.name.trim().toLowerCase() == name.trim().toLowerCase()));
+    return of(result);
+  }
+
   private static error(msg: string): DataServiceResponse {
     return { success: false, error: msg };
   }
 
   private static success(): DataServiceResponse {
-    return { success: false, error: "" };
+    return { success: true, error: "" };
   }
 }

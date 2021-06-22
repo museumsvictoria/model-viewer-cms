@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
@@ -18,9 +18,10 @@ import { MatInputModule } from "@angular/material/input";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatCardModule } from "@angular/material/card";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
-import { NewProjectComponent } from './new-project/new-project.component';
 import { ProjectListComponent } from './project-list/project-list.component';
 import { ViewProjectComponent } from './view-project/view-project.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import {NewProjectDialogComponent} from "./new-project-dialog/new-project-dialog.component";
 
 @NgModule({
   declarations: [
@@ -28,16 +29,17 @@ import { ViewProjectComponent } from './view-project/view-project.component';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    NewProjectComponent,
+    NewProjectDialogComponent,
     ProjectListComponent,
     ViewProjectComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
     HttpClientModule,
     FlexLayoutModule,
     FormsModule,
     BrowserAnimationsModule,
+    MatDialogModule,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
@@ -47,10 +49,10 @@ import { ViewProjectComponent } from './view-project/view-project.component';
     MatCardModule,
     MatSnackBarModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
-    ])
+      {path: '', component: HomeComponent, pathMatch: 'full'},
+      {path: 'fetch-data', component: FetchDataComponent},
+    ]),
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
