@@ -9,6 +9,9 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
+import { NewProjectComponent } from './new-project/new-project.component';
+import { ProjectListComponent } from './project-list/project-list.component';
+import { ViewProjectComponent } from './view-project/view-project.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +19,10 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent
+    FetchDataComponent,
+    NewProjectComponent,
+    ProjectListComponent,
+    ViewProjectComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
