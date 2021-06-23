@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ProjectModel } from "../models/projectModel";
+import { ProjectModel, SectionModel } from "../models/projectModel";
 import { DataServiceResponse } from "./dataServiceResponse";
 import { EMPTY, Observable, of, throwError } from "rxjs";
 import { first, map, switchMap, tap } from "rxjs/operators";
@@ -18,7 +18,13 @@ export class DataService {
     p.id = "1";
     p.addedBy = "Forbes";
     p.name = "Test project";
-    p.objects = [];
+    p.sections = [
+      {
+        id: "1",
+        name: "Section 1",
+        objects: [{ id: "1", name: "object 1", fileName: "model.glb", hotspots:[] }],
+      },
+    ];
     return [p];
   }
 
@@ -30,9 +36,15 @@ export class DataService {
   }
 
   getProject(id: string): Observable<ProjectModel> {
+    if (!id) {
+      return throwError("Id is empty");
+    }
     return this.getProjects().pipe(
       map((x) =>
-        x.find((x) => x.id.trim().toLowerCase() == id.trim().toLowerCase())
+        x.find(
+          (x) =>
+            x.id != null && x.id.trim().toLowerCase() == id.trim().toLowerCase()
+        )
       )
     );
   }
@@ -41,15 +53,27 @@ export class DataService {
     if (!name) {
       return throwError("Project name is empty");
     }
-
     return this.projectExists(name).pipe(
-      first(),
       switchMap((projectExists) =>
         projectExists
           ? throwError("Name in use")
           : this.saveProjectToServer(name)
       )
     );
+  }
+
+  addSection(project: ProjectModel, name: string): Observable<any> {
+    if (!project) {
+      return throwError("Project is null");
+    }
+    if (!name) {
+      return throwError("Section name is empty");
+    }
+    const p = new SectionModel();
+    p.name = name;
+    p.id = String(project.sections.length + 1);
+    project.sections.push(p);
+    return of(true);
   }
 
   private saveProjectToServer(name: string): Observable<boolean> {

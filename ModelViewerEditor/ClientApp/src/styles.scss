@@ -25,3 +25,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .container{
   padding: 20px;
 }
+
+.breadcrumb{
+  span, a{
+    &:not(:last-child){
+      margin-right: 0.3em;
+      &::after {
+        content: " > ";
+      }
+    }
+
+  }
+}

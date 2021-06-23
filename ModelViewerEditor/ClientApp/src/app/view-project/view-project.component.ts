@@ -17,16 +17,31 @@ export class ViewProjectComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // First get the product id from the current route.
     const routeParams = this.route.snapshot.paramMap;
-    const idFromRoute = routeParams.get("id");
+    const idFromRoute = routeParams.get("projectId");
+    if (!idFromRoute) {
+      this.notFound = true;
+    } else {
+      this.loadProject(idFromRoute);
+    }
+  }
 
-    // Find the product that correspond with the id provided in route.
+  private loadProject(idFromRoute: string) {
     this.dataService
       .getProject(idFromRoute)
       .pipe(first())
-      .subscribe((x) => (this.project = x));
+      .subscribe(
+        (project) => {
+          if (!project) {
+            this.notFound = true;
+          } else {
+            this.project = project;
+          }
+        },
+        (error) => (this.notFound = true)
+      );
   }
 
-  @Input() project: ProjectModel;
+  notFound = false;
+  project: ProjectModel;
 }

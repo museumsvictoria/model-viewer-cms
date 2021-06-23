@@ -1,3 +1,10 @@
-<p *ngIf="!project">Undefined project</p>
+<mat-toolbar>
+  <span>Model Editor: <a [routerLink]="['/']">Projects</a>  > {{project ? project.name : ' (not found)'}}</span>
+</mat-toolbar>
+<div class="container">
+  <p *ngIf="notFound" class="mat-error">Not found</p>
+  <div *ngIf="project">
+    <h2 class="mat-h2">{{project.name}}</h2>
+    <app-section-list [project]="project"></app-section-list></div>
+</div>
 
-<p *ngIf="project">{{project.name}}</p>

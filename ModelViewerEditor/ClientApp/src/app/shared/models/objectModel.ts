@@ -1,9 +1,8 @@
-import {HotspotModel} from "./hotspotModel";
+import { HotspotModel } from "./hotspotModel";
 
 export class ObjectModel {
-    name: string;
-    addedBy: string;
-    hotspots: HotspotModel[];
-
+  id: string;
+  name: string;
+  fileName: string;
+  hotspots: HotspotModel[];
 }
-

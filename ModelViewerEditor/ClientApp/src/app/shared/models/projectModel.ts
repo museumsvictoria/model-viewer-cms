@@ -4,5 +4,11 @@ export class ProjectModel {
     id: string;
     name: string;
     addedBy: string;
-    objects: ObjectModel[];
+    sections: SectionModel[];
+}
+
+export class SectionModel {
+  id: string;
+  name: string;
+  objects: ObjectModel[];
 }

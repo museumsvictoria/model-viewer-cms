@@ -1,1 +1,10 @@
-<p>view-section works!</p>
+<mat-toolbar class="breadcrumb">
+  <span>Model Editor: <a [routerLink]="['/']">Projects</a></span>
+  <span *ngIf="project"><a [routerLink]="['/', 'project', project.id]">{{project.name}}</a> </span>
+  <span>{{section ? section.name : ' (not found)'}}
+  </span>
+</mat-toolbar>
+<div class="container">
+  <p *ngIf="notFound" class="mat-error">Not found</p>
+    <h2  *ngIf="section"class="mat-h2">{{section.name}}</h2>
+</div>
