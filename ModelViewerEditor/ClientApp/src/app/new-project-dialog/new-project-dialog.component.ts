@@ -31,9 +31,10 @@ export class NewProjectDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit_click() {
-    console.log("calling dataservice");
     this.dataService.addProject(this.projectName.value).subscribe(
-      () => this.dialogRef.close(),
+      () => {
+        this.dialogRef.close();
+      },
       (err) => console.log(err)
     );
   }

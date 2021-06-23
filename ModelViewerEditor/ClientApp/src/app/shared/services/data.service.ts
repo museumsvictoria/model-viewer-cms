@@ -52,12 +52,12 @@ export class DataService {
     );
   }
 
-  private saveProjectToServer(name: string): Observable<any> {
+  private saveProjectToServer(name: string): Observable<boolean> {
     const p = new ProjectModel();
     p.name = name;
     p.id = String(this.serverProjects.length + 1);
     this.serverProjects.push(p);
-    return EMPTY;
+    return of(true);
   }
 
   projectExists(name: string): Observable<boolean> {

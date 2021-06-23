@@ -26,7 +26,7 @@ export class HomeComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.dataService.getProjects().subscribe(x => this.projects = x);
+    //  this.dataService.getProjects().subscribe(x => this.projects = x);
     })
 
 
