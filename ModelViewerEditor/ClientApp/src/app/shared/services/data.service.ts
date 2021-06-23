@@ -1,7 +1,9 @@
 import { Injectable } from "@angular/core";
 import { ProjectModel } from "../models/projectModel";
 import { DataServiceResponse } from "./dataServiceResponse";
-import {Observable, of} from "rxjs";
+import { EMPTY, Observable, of, throwError } from "rxjs";
+import { first, map, switchMap, tap } from "rxjs/operators";
+import { flatMap } from "rxjs/internal/operators";
 
 @Injectable({
   providedIn: "root",
@@ -19,39 +21,41 @@ export class DataService {
     return [p];
   }
 
-  getProjects(): ProjectModel[] {
+  getProjects(): Observable<ProjectModel[]> {
     if (!this.serverProjects) {
       this.serverProjects = DataService.fetchProjects();
     }
-    return this.serverProjects;
+    return of(this.serverProjects);
   }
 
-  addProject(name: string, err: string = ""): DataServiceResponse {
+  addProject(name: string): Observable<any> {
     if (!name) {
-      return DataService.error("Project name is empty");
+      return throwError("Project name is empty");
     }
-    const projects = this.getProjects();
-    if (projects.some((x) => x.name.trim().toLowerCase() == name.trim().toLowerCase())) {
-      return DataService.error("Name in use");
-    }
+
+    return this.projectExists(name).pipe(
+      first(),
+      switchMap((projectExists) =>
+        projectExists
+          ? throwError("Name in use")
+          : this.saveProjectToServer(name)
+      )
+    );
+  }
+
+
+  private saveProjectToServer(name: string): Observable<any> {
     const p = new ProjectModel();
     p.name = name;
     this.serverProjects.push(p);
-    return DataService.success();
+    return EMPTY;
   }
 
-  projectExists(name: string): Observable<boolean>{
-    const projects = this.getProjects();
-    console.log(projects.some((x) => x.name.trim().toLowerCase() == name.trim().toLowerCase()));
-    const result = (projects.some((x) => x.name.trim().toLowerCase() == name.trim().toLowerCase()));
-    return of(result);
-  }
-
-  private static error(msg: string): DataServiceResponse {
-    return { success: false, error: msg };
-  }
-
-  private static success(): DataServiceResponse {
-    return { success: true, error: "" };
+  projectExists(name: string): Observable<boolean> {
+    return this.getProjects().pipe(
+      map((x) =>
+        x.some((x) => x.name.trim().toLowerCase() == name.trim().toLowerCase())
+      )
+    );
   }
 }

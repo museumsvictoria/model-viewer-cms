@@ -3,6 +3,7 @@ import { DataService } from "../shared/services/data.service";
 import { ProjectModel } from "../shared/models/projectModel";
 import {MatDialog} from "@angular/material/dialog";
 import {NewProjectDialogComponent} from "../new-project-dialog/new-project-dialog.component";
+import {first} from "rxjs/operators";
 
 @Component({
   selector: "app-home",
@@ -11,37 +12,26 @@ import {NewProjectDialogComponent} from "../new-project-dialog/new-project-dialo
 })
 export class HomeComponent {
   constructor(private dataService: DataService,private dialog: MatDialog) {
-    this.projects = dataService.getProjects();
+    this.dataService.getProjects().pipe(first()).subscribe(x => this.projects = x);
   }
 
   projects: ProjectModel[];
 
   selectedProject: ProjectModel;
 
-  addingProject = false;
-
   onNewProject_click() {
-    this.addingProject = true;
-
     const dialogRef = this.dialog.open(NewProjectDialogComponent, {
       height: '400px',
       width: '600px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.projects = this.dataService.getProjects();
+      this.dataService.getProjects().subscribe(x => this.projects = x);
     })
 
 
 
   }
 
-  onProjectCreation(newProject: ProjectModel) {
-    this.addingProject = false;
-    this.projects.push(newProject);
-  }
 
-  onProjectCreationCancel() {
-    this.addingProject = false;
-  }
 }
