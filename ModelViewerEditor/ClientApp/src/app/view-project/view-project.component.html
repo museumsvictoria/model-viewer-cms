@@ -1,1 +1,3 @@
-<p>view-project works!</p>
+<p *ngIf="!project">Undefined project</p>
+
+<p *ngIf="project">{{project.name}}</p>
