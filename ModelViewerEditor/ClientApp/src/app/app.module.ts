@@ -23,6 +23,7 @@ import { NewProjectDialogComponent } from "./new-project-dialog/new-project-dial
 import { AppRoutingModule } from "./app-routing.module";
 import { SectionListComponent } from './section-list/section-list.component';
 import { ViewSectionComponent } from './view-section/view-section.component';
+import { NewSectionDialogComponent } from './new-section-dialog/new-section-dialog.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { ViewSectionComponent } from './view-section/view-section.component';
     ViewProjectComponent,
     SectionListComponent,
     ViewSectionComponent,
+    NewSectionDialogComponent,
   ],
   imports: [
     BrowserModule,
