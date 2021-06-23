@@ -1,19 +1,12 @@
-<div>
-  <mat-toolbar>
-    <span>Projects</span>
-    <span class="spacer"></span>
-    <button (click)="onNewProject_click()"  mat-icon-button color="primary">
-      <mat-icon>add_circle</mat-icon>
-
-    </button>
-  </mat-toolbar>
-
-  <mat-selection-list [multiple]="false">
-    <mat-list-option *ngFor="let project of projects" [value]="project">
-      {{project.name}}
-    </mat-list-option>
-  </mat-selection-list>
-
+<mat-toolbar>
+  <span>Model Editor > Projects</span>
+  <span class="spacer"></span>
+  <button (click)="onNewProject_click()"  mat-icon-button color="primary">
+    <mat-icon>add_circle</mat-icon>
+  </button>
+</mat-toolbar>
+<div class="container">
+  <app-project-list [projects]="projects"></app-project-list>
 </div>
 
 

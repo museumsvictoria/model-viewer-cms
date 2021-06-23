@@ -1,1 +1,5 @@
-<p>project-list works!</p>
+<mat-selection-list [multiple]="false">
+  <mat-list-option *ngFor="let project of projects" [value]="project">
+    {{project.name}}
+  </mat-list-option>
+</mat-selection-list>
