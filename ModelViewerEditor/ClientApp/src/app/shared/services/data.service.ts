@@ -13,8 +13,9 @@ export class DataService {
 
   private serverProjects: ProjectModel[];
 
-  private static fetchProjects(): ProjectModel[] {
+  private static initProjectList(): ProjectModel[] {
     const p = new ProjectModel();
+    p.id = "1";
     p.addedBy = "Forbes";
     p.name = "Test project";
     p.objects = [];
@@ -23,9 +24,17 @@ export class DataService {
 
   getProjects(): Observable<ProjectModel[]> {
     if (!this.serverProjects) {
-      this.serverProjects = DataService.fetchProjects();
+      this.serverProjects = DataService.initProjectList();
     }
     return of(this.serverProjects);
+  }
+
+  getProject(id: string): Observable<ProjectModel> {
+    return this.getProjects().pipe(
+      map((x) =>
+        x.find((x) => x.id.trim().toLowerCase() == id.trim().toLowerCase())
+      )
+    );
   }
 
   addProject(name: string): Observable<any> {
@@ -43,10 +52,10 @@ export class DataService {
     );
   }
 
-
   private saveProjectToServer(name: string): Observable<any> {
     const p = new ProjectModel();
     p.name = name;
+    p.id = String(this.serverProjects.length + 1);
     this.serverProjects.push(p);
     return EMPTY;
   }
