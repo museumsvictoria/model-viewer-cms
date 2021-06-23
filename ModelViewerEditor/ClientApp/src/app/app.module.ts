@@ -21,6 +21,7 @@ import { ViewProjectComponent } from "./view-project/view-project.component";
 import { MatDialogModule } from "@angular/material/dialog";
 import { NewProjectDialogComponent } from "./new-project-dialog/new-project-dialog.component";
 import { AppRoutingModule } from "./app-routing.module";
+import { SectionListComponent } from './section-list/section-list.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { AppRoutingModule } from "./app-routing.module";
     NewProjectDialogComponent,
     ProjectListComponent,
     ViewProjectComponent,
+    SectionListComponent,
   ],
   imports: [
     BrowserModule,
