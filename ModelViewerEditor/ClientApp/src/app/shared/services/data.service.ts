@@ -4,6 +4,7 @@ import { DataServiceResponse } from "./dataServiceResponse";
 import { EMPTY, Observable, of, throwError } from "rxjs";
 import { first, map, switchMap, tap } from "rxjs/operators";
 import { flatMap } from "rxjs/internal/operators";
+import {ObjectModel} from "../models/objectModel";
 
 @Injectable({
   providedIn: "root",
@@ -90,5 +91,19 @@ export class DataService {
         x.some((x) => x.name.trim().toLowerCase() == name.trim().toLowerCase())
       )
     );
+  }
+
+  addModel(section: SectionModel, name: string) {
+    if (!section) {
+      return throwError("Section is null");
+    }
+    if (!name) {
+      return throwError("Model name is empty");
+    }
+    const p = new ObjectModel();
+    p.name = name;
+    p.id = String(section.objects.length + 1);
+    section.objects.push(p);
+    return of(true);
   }
 }
