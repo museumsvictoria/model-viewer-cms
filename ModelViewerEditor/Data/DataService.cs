@@ -14,35 +14,42 @@ namespace ModelViewerEditor.Data
         {
             _db = dbContext.Database;
         }
+        
+        private ILiteCollection<ProjectModel> GetProjectCollection()
+        {
+            return _db.GetCollection<ProjectModel>("Project");
+        }
 
         public IEnumerable<ProjectModel> FindAll()
         {
-            var result = _db.GetCollection<ProjectModel>("Project")
+            var result = GetProjectCollection()
                 .FindAll();
             return result;
         }
 
+   
+
         public ProjectModel FindOne(ObjectId id)
         {
-            return _db.GetCollection<ProjectModel>("Project")
+            return GetProjectCollection()
                 .Find(x => x.Id == id).FirstOrDefault();
         }
 
         public int Insert(ProjectModel project)
         {
-            return _db.GetCollection<ProjectModel>("Project")
+            return GetProjectCollection()
                 .Insert(project);
         }
 
         public bool Update(ProjectModel forecast)
         {
-            return _db.GetCollection<ProjectModel>("Project")
+            return GetProjectCollection()
                 .Update(forecast);
         }
 
         public int Delete(ObjectId id)
         {
-            return _db.GetCollection<ProjectModel>("Project")
+            return GetProjectCollection()
                 .DeleteMany(x => x.Id == id);
         }
     }
