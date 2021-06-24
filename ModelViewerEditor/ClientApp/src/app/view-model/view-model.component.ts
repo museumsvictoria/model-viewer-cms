@@ -2,9 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { DataService } from "../shared/services/data.service";
 import { first } from "rxjs/operators";
-import { ProjectModel, SectionModel } from "../shared/models/projectModel";
+import { ProjectModel } from "../shared/models/projectModel";
 import { ObjectModel } from "../shared/models/objectModel";
-import {HotspotModel} from "../shared/models/hotspotModel";
+import { HotspotModel } from "../shared/models/hotspotModel";
+import { SectionModel } from "../shared/models/sectionModel";
 
 @Component({
   selector: "app-view-model",

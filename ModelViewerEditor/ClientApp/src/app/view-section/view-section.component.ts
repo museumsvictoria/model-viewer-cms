@@ -2,7 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { DataService } from "../shared/services/data.service";
 import { first } from "rxjs/operators";
-import { ProjectModel, SectionModel } from "../shared/models/projectModel";
+import { ProjectModel } from "../shared/models/projectModel";
+import { SectionModel } from "../shared/models/sectionModel";
 
 @Component({
   selector: "app-view-section",
@@ -36,7 +37,7 @@ export class ViewSectionComponent implements OnInit {
             this.project = project;
             this.section = project.sections.find((x) => x.id == sectionId);
           }
-          if(!this.project || !this.section){
+          if (!this.project || !this.section) {
             this.notFound = true;
           }
         },

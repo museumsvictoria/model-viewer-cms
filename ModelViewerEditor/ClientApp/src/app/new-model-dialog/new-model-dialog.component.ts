@@ -9,7 +9,8 @@ import { Observable, of, throwError } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 import { DataService } from "../shared/services/data.service";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { ProjectModel, SectionModel } from "../shared/models/projectModel";
+import { ProjectModel } from "../shared/models/projectModel";
+import { SectionModel } from "../shared/models/sectionModel";
 
 @Component({
   selector: "app-new-model-dialog",

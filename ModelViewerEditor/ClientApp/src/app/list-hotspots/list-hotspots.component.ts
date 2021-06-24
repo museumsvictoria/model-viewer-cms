@@ -1,11 +1,12 @@
 import { Component, Input, EventEmitter, OnInit, Output } from "@angular/core";
 import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
-import { ProjectModel, SectionModel } from "../shared/models/projectModel";
+import { ProjectModel } from "../shared/models/projectModel";
 import { MatSelectionListChange } from "@angular/material/list";
 import { NewModelDialogComponent } from "../new-model-dialog/new-model-dialog.component";
 import { ObjectModel } from "../shared/models/objectModel";
 import { HotspotModel } from "../shared/models/hotspotModel";
+import { SectionModel } from "../shared/models/sectionModel";
 
 @Component({
   selector: "app-list-hotspots",

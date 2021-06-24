@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
-import { ProjectModel, SectionModel } from "../models/projectModel";
+import { ProjectModel } from "../models/projectModel";
 import { DataServiceResponse } from "./dataServiceResponse";
 import { EMPTY, Observable, of, throwError } from "rxjs";
 import { first, map, switchMap, tap } from "rxjs/operators";
 import { flatMap } from "rxjs/internal/operators";
 import { ObjectModel } from "../models/objectModel";
+import { SectionModel } from "../models/sectionModel";
 
 @Injectable({
   providedIn: "root",
@@ -28,7 +29,10 @@ export class DataService {
             id: "1",
             name: "object 1",
             fileName: "model.glb",
-            hotspots: [{ id: "1", text: "This is hotspot 1" },{ id: "2", text: "This is hotspot 2" }],
+            hotspots: [
+              { id: "1", text: "This is hotspot 1" },
+              { id: "2", text: "This is hotspot 2" },
+            ],
           },
         ],
       },

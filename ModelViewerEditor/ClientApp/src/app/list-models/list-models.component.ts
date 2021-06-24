@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
-import { ProjectModel, SectionModel } from "../shared/models/projectModel";
+import { ProjectModel } from "../shared/models/projectModel";
 import { MatSelectionListChange } from "@angular/material/list";
 import { NewSectionDialogComponent } from "../new-section-dialog/new-section-dialog.component";
 import { NewModelDialogComponent } from "../new-model-dialog/new-model-dialog.component";
+import { SectionModel } from "../shared/models/sectionModel";
 
 @Component({
   selector: "app-list-models",
