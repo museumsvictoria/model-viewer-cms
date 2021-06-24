@@ -1,1 +1,11 @@
-<p>view-model works!</p>
+<mat-toolbar class="breadcrumb">
+  <span>Model Editor: <a [routerLink]="['/']">Projects</a></span>
+  <span *ngIf="project"><a [routerLink]="['/', 'project', project.id]">{{project.name}}</a> </span>
+  <span *ngIf="section"><a [routerLink]="['/', 'project', project.id, section.id]">{{section.name}}</a> </span>
+  <span>{{model ? model.name : ' (not found)'}}
+  </span>
+</mat-toolbar>
+<div class="container">
+  <p *ngIf="notFound" class="mat-error">Not found</p>
+  <h2  *ngIf="model" class="mat-h2">{{model.name}}</h2>
+</div>

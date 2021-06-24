@@ -9,7 +9,7 @@ import { Observable, of, throwError } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 import { DataService } from "../shared/services/data.service";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import {ProjectModel, SectionModel} from "../shared/models/projectModel";
+import { ProjectModel, SectionModel } from "../shared/models/projectModel";
 
 @Component({
   selector: "app-new-model-dialog",
@@ -47,7 +47,7 @@ export class NewModelDialogComponent implements OnInit {
   validateNameViaServer(
     ctrl: AbstractControl
   ): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
-    var r = this.data.section.objects.some(
+    var r = this.data.section.models.some(
       (x) => x.name.trim().toLowerCase() == ctrl.value.trim().toLowerCase()
     );
     return of(r ? { nameExists: true } : null);

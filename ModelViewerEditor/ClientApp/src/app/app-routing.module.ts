@@ -3,12 +3,14 @@ import { Routes, RouterModule } from "@angular/router";
 import { HomeComponent } from "./home/home.component";
 import { FetchDataComponent } from "./fetch-data/fetch-data.component";
 import { ViewProjectComponent } from "./view-project/view-project.component";
-import { ViewSectionComponent } from "./view-section/view-section.component"; // CLI imports router
+import { ViewSectionComponent } from "./view-section/view-section.component";
+import { ViewModelComponent } from "./view-model/view-model.component"; // CLI imports router
 
 const routes: Routes = [
   { path: "", component: HomeComponent, pathMatch: "full" },
   { path: "project/:projectId", component: ViewProjectComponent },
   { path: "project/:projectId/:sectionId", component: ViewSectionComponent },
+  { path: "project/:projectId/:sectionId/:modelId", component: ViewModelComponent },
   { path: "fetch-data", component: FetchDataComponent },
 ]; // sets up routes constant where you define your routes
 

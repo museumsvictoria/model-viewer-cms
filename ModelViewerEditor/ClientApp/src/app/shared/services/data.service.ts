@@ -4,7 +4,7 @@ import { DataServiceResponse } from "./dataServiceResponse";
 import { EMPTY, Observable, of, throwError } from "rxjs";
 import { first, map, switchMap, tap } from "rxjs/operators";
 import { flatMap } from "rxjs/internal/operators";
-import {ObjectModel} from "../models/objectModel";
+import { ObjectModel } from "../models/objectModel";
 
 @Injectable({
   providedIn: "root",
@@ -23,7 +23,9 @@ export class DataService {
       {
         id: "1",
         name: "Section 1",
-        objects: [{ id: "1", name: "object 1", fileName: "model.glb", hotspots:[] }],
+        models: [
+          { id: "1", name: "object 1", fileName: "model.glb", hotspots: [] },
+        ],
       },
     ];
     return [p];
@@ -102,8 +104,8 @@ export class DataService {
     }
     const p = new ObjectModel();
     p.name = name;
-    p.id = String(section.objects.length + 1);
-    section.objects.push(p);
+    p.id = String(section.models.length + 1);
+    section.models.push(p);
     return of(true);
   }
 }
