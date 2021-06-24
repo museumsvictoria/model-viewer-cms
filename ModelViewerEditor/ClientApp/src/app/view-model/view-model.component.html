@@ -8,4 +8,6 @@
 <div class="container">
   <p *ngIf="notFound" class="mat-error">Not found</p>
   <h2  *ngIf="model" class="mat-h2">{{model.name}}</h2>
+  <h3>Hotspots</h3>
+  <app-list-hotspots [model]="model" (hotspotSelect)="onHotspotSelect($event)"></app-list-hotspots>
 </div>

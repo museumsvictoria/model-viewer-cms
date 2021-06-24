@@ -24,7 +24,12 @@ export class DataService {
         id: "1",
         name: "Section 1",
         models: [
-          { id: "1", name: "object 1", fileName: "model.glb", hotspots: [] },
+          {
+            id: "1",
+            name: "object 1",
+            fileName: "model.glb",
+            hotspots: [{ id: "1", text: "This is hotspot 1" },{ id: "2", text: "This is hotspot 2" }],
+          },
         ],
       },
     ];

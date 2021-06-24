@@ -1,4 +1,4 @@
 export class HotspotModel {
-    name: string;
-    addedBy: string;
+    id: string;
+    text: string;
 }

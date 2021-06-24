@@ -4,6 +4,7 @@ import { DataService } from "../shared/services/data.service";
 import { first } from "rxjs/operators";
 import { ProjectModel, SectionModel } from "../shared/models/projectModel";
 import { ObjectModel } from "../shared/models/objectModel";
+import {HotspotModel} from "../shared/models/hotspotModel";
 
 @Component({
   selector: "app-view-model",
@@ -59,4 +60,8 @@ export class ViewModelComponent implements OnInit {
   project: ProjectModel;
   section: SectionModel;
   model: ObjectModel;
+
+  onHotspotSelect(hotspot: HotspotModel) {
+    console.log(hotspot);
+  }
 }
