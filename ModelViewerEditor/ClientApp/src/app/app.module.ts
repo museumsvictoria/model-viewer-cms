@@ -24,6 +24,8 @@ import { AppRoutingModule } from "./app-routing.module";
 import { SectionListComponent } from './section-list/section-list.component';
 import { ViewSectionComponent } from './view-section/view-section.component';
 import { NewSectionDialogComponent } from './new-section-dialog/new-section-dialog.component';
+import { NewModelDialogComponent } from './new-model-dialog/new-model-dialog.component';
+import { ViewModelComponent } from './view-model/view-model.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { NewSectionDialogComponent } from './new-section-dialog/new-section-dial
     SectionListComponent,
     ViewSectionComponent,
     NewSectionDialogComponent,
+    NewModelDialogComponent,
+    ViewModelComponent,
   ],
   imports: [
     BrowserModule,
