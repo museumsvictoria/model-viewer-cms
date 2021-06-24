@@ -4,11 +4,11 @@ import { MatSelectionListChange } from "@angular/material/list";
 import { Router } from "@angular/router";
 
 @Component({
-  selector: "app-project-list",
-  templateUrl: "./project-list.component.html",
-  styleUrls: ["./project-list.component.scss"],
+  selector: "app-list-projects",
+  templateUrl: "./list-projects.component.html",
+  styleUrls: ["./list-projects.component.scss"],
 })
-export class ProjectListComponent implements OnInit {
+export class ListProjectsComponent implements OnInit {
   constructor(private _router: Router) {}
 
   @Input() projects: ProjectModel[];

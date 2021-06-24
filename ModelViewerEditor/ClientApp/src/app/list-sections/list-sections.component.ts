@@ -7,11 +7,11 @@ import { MatDialog } from "@angular/material/dialog";
 import { NewSectionDialogComponent } from "../new-section-dialog/new-section-dialog.component";
 
 @Component({
-  selector: "app-section-list",
-  templateUrl: "./section-list.component.html",
-  styleUrls: ["./section-list.component.scss"],
+  selector: "app-list-sections",
+  templateUrl: "./list-sections.component.html",
+  styleUrls: ["./list-sections.component.scss"],
 })
-export class SectionListComponent implements OnInit {
+export class ListSectionsComponent implements OnInit {
   constructor(private _router: Router, private dialog: MatDialog) {}
 
   @Input() project: ProjectModel;

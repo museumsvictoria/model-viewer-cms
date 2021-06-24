@@ -16,16 +16,16 @@ import { MatInputModule } from "@angular/material/input";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatCardModule } from "@angular/material/card";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { ProjectListComponent } from "./project-list/project-list.component";
+import { ListProjectsComponent } from "./list-projects/list-projects.component";
 import { ViewProjectComponent } from "./view-project/view-project.component";
 import { MatDialogModule } from "@angular/material/dialog";
 import { NewProjectDialogComponent } from "./new-project-dialog/new-project-dialog.component";
 import { AppRoutingModule } from "./app-routing.module";
-import { SectionListComponent } from './section-list/section-list.component';
-import { ViewSectionComponent } from './view-section/view-section.component';
-import { NewSectionDialogComponent } from './new-section-dialog/new-section-dialog.component';
-import { NewModelDialogComponent } from './new-model-dialog/new-model-dialog.component';
-import { ViewModelComponent } from './view-model/view-model.component';
+import { ListSectionsComponent } from "./list-sections/list-sections.component";
+import { ViewSectionComponent } from "./view-section/view-section.component";
+import { NewSectionDialogComponent } from "./new-section-dialog/new-section-dialog.component";
+import { NewModelDialogComponent } from "./new-model-dialog/new-model-dialog.component";
+import { ViewModelComponent } from "./view-model/view-model.component";
 
 @NgModule({
   declarations: [
@@ -34,9 +34,9 @@ import { ViewModelComponent } from './view-model/view-model.component';
     CounterComponent,
     FetchDataComponent,
     NewProjectDialogComponent,
-    ProjectListComponent,
+    ListProjectsComponent,
     ViewProjectComponent,
-    SectionListComponent,
+    ListSectionsComponent,
     ViewSectionComponent,
     NewSectionDialogComponent,
     NewModelDialogComponent,
