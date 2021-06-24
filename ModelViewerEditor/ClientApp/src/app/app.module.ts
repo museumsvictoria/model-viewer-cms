@@ -27,6 +27,7 @@ import { NewSectionDialogComponent } from "./new-section-dialog/new-section-dial
 import { NewModelDialogComponent } from "./new-model-dialog/new-model-dialog.component";
 import { ViewModelComponent } from "./view-model/view-model.component";
 import { ListModelsComponent } from './list-models/list-models.component';
+import { ListHotspotsComponent } from './list-hotspots/list-hotspots.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { ListModelsComponent } from './list-models/list-models.component';
     NewModelDialogComponent,
     ViewModelComponent,
     ListModelsComponent,
+    ListHotspotsComponent,
   ],
   imports: [
     BrowserModule,
