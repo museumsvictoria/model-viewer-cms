@@ -26,6 +26,7 @@ import { ViewSectionComponent } from "./view-section/view-section.component";
 import { NewSectionDialogComponent } from "./new-section-dialog/new-section-dialog.component";
 import { NewModelDialogComponent } from "./new-model-dialog/new-model-dialog.component";
 import { ViewModelComponent } from "./view-model/view-model.component";
+import { ListModelsComponent } from './list-models/list-models.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { ViewModelComponent } from "./view-model/view-model.component";
     NewSectionDialogComponent,
     NewModelDialogComponent,
     ViewModelComponent,
+    ListModelsComponent,
   ],
   imports: [
     BrowserModule,
