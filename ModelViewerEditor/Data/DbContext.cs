@@ -7,9 +7,9 @@ namespace ModelViewerEditor.Data
     {
         public LiteDatabase Database { get; }
 
-        public DbContext(IOptions<DbOptions> options)
+        public DbContext(IOptions<AppSettings> settings)
         {
-            Database = new LiteDatabase(options.Value.DatabaseLocation);
+            Database = new LiteDatabase(settings.Value.ConnectionString);
         }
     }
 }

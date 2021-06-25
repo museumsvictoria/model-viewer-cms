@@ -1,56 +1,67 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using LiteDB;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using ModelViewerEditor.Data;
+using ModelViewerEditor.Helpers;
 using ModelViewerEditor.Models;
 
 namespace ModelViewerEditor.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class ProjectController : ControllerBase
     {
 
         private readonly ILogger<ProjectController> _logger;
-        private readonly DataService _dataService;
-        public ProjectController(ILogger<ProjectController> logger, DataService dataService)
+        private readonly IDataService _dataService;
+        public ProjectController(ILogger<ProjectController> logger, IDataService dataService)
         {
             _logger = logger;
             _dataService = dataService;
         }
         
-        [HttpGet]
-        public IEnumerable<ProjectModel> Get()
+        [HttpGet("get-projects")]
+        public IEnumerable<ProjectModel> GetAll()
         {
-            return _dataService.FindAll();
+            return _dataService.GetAll();
         }
         
-        [HttpGet("{id}", Name = "FindOne")]
-        public ActionResult<WeatherForecast> Get(ObjectId id)
+        [HttpGet("get-project", Name = nameof(GetOne))]
+        public ActionResult<ProjectModel> GetOne(string id)
         {
-            var result = _dataService.FindOne(id);
-            if (result != default)
-                return Ok(result);
-            else
+            if (!id.IsObjectId())
                 return NotFound();
+            
+            var result = _dataService.Get(new ObjectId(id));
+            return result != default ? Ok(result) : NotFound();
         }
         
-        [HttpPost]
-        public ActionResult<WeatherForecast> Insert(ProjectModel dto)
+        
+        [HttpGet("project-exists")]
+        public ActionResult<bool> ProjectExists(string name)
         {
-            var id = _dataService.Insert(dto);
-            if (id != default)
-                return CreatedAtRoute("FindOne", new { id = id }, dto);
-            else
-                return BadRequest();
+            var result = _dataService.Exists(x => x.Name.ToLower() == name.ToLower());
+            return Ok(result);
         }
-
-        [HttpPut]
-        public ActionResult<WeatherForecast> Update(ProjectModel dto)
+        
+        [HttpPost("add-project")]
+        public ActionResult Post([FromBody]string name)
+        {
+            var p = new ProjectModel {Name = name};
+            var id = _dataService.Insert(p);
+            if (id != default)
+                return CreatedAtAction(nameof(GetOne), new { id = id });
+               // return NoContent();
+            return BadRequest();
+        }
+        
+        [HttpPut("update-project")]
+        public ActionResult Put(ProjectModel dto)
         {
             var result = _dataService.Update(dto);
             if (result)
@@ -59,8 +70,8 @@ namespace ModelViewerEditor.Controllers
                 return NotFound();
         }
 
-        [HttpDelete("{id}")]
-        public ActionResult<ProjectModel> Delete(ObjectId id)
+        [HttpDelete("delete-project")]
+        public ActionResult Delete(ObjectId id)
         {
             var result = _dataService.Delete(id);
             if (result > 0)

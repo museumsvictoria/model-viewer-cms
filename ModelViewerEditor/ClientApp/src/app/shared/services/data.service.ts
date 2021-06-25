@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 import { ProjectModel } from "../models/projectModel";
 import { DataServiceResponse } from "./dataServiceResponse";
 import { EMPTY, Observable, of, throwError } from "rxjs";
@@ -6,12 +6,26 @@ import { first, map, switchMap, tap } from "rxjs/operators";
 import { flatMap } from "rxjs/internal/operators";
 import { ObjectModel } from "../models/objectModel";
 import { SectionModel } from "../models/sectionModel";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root",
 })
 export class DataService {
-  constructor() {}
+  constructor(
+    private http: HttpClient,
+    @Inject("BASE_URL") private baseUrl: string
+  ) {}
+
+  httpOptions = {
+    headers: new HttpHeaders({
+      "Content-Type": "application/json",
+    }),
+  };
+
+  // private httpOptions = {
+  //   headers: new Headers({ "Content-Type": "application/json" }),
+  // };
 
   private serverProjects: ProjectModel[];
 
@@ -55,36 +69,26 @@ export class DataService {
   }
 
   getProjects(): Observable<ProjectModel[]> {
-    if (!this.serverProjects) {
-      this.serverProjects = DataService.initProjectList();
-    }
-    return of(this.serverProjects);
+    return this.http.get<ProjectModel[]>(`${this.baseUrl}get-projects`);
   }
 
   getProject(id: string): Observable<ProjectModel> {
     if (!id) {
-      return throwError("Id is empty");
+      return throwError("id is empty");
     }
-    return this.getProjects().pipe(
-      map((x) =>
-        x.find(
-          (x) =>
-            x.id != null && x.id.trim().toLowerCase() == id.trim().toLowerCase()
-        )
-      )
-    );
+    return this.http.get<ProjectModel>(`${this.baseUrl}get-project?id=${id}`);
   }
 
   addProject(name: string): Observable<any> {
     if (!name) {
       return throwError("Project name is empty");
     }
-    return this.projectExists(name).pipe(
-      switchMap((projectExists) =>
-        projectExists
-          ? throwError("Name in use")
-          : this.saveProjectToServer(name)
-      )
+    var body = `"${name}"`;
+
+    return this.http.post<any>(
+      `${this.baseUrl}add-project`,
+      body,
+      this.httpOptions
     );
   }
 
@@ -102,19 +106,9 @@ export class DataService {
     return of(true);
   }
 
-  private saveProjectToServer(name: string): Observable<boolean> {
-    const p = new ProjectModel();
-    p.name = name;
-    p.id = String(this.serverProjects.length + 1);
-    this.serverProjects.push(p);
-    return of(true);
-  }
-
   projectExists(name: string): Observable<boolean> {
-    return this.getProjects().pipe(
-      map((x) =>
-        x.some((x) => x.name.trim().toLowerCase() == name.trim().toLowerCase())
-      )
+    return this.http.get<boolean>(
+      `${this.baseUrl}project-exists?name=${name}`
     );
   }
 

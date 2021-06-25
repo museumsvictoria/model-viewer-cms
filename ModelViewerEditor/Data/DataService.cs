@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using LiteDB;
 using ModelViewerEditor.Models;
 
@@ -20,7 +22,7 @@ namespace ModelViewerEditor.Data
             return _db.GetCollection<ProjectModel>("Project");
         }
 
-        public IEnumerable<ProjectModel> FindAll()
+        public IEnumerable<ProjectModel> GetAll()
         {
             var result = GetProjectCollection()
                 .FindAll();
@@ -29,13 +31,32 @@ namespace ModelViewerEditor.Data
 
    
 
-        public ProjectModel FindOne(ObjectId id)
+        public ProjectModel Get(ObjectId id)
+        {
+            return GetProjectCollection().FindById(id);
+        }
+        
+        public ProjectModel FindOne(Expression<Func<ProjectModel, bool>> query)
         {
             return GetProjectCollection()
-                .Find(x => x.Id == id).FirstOrDefault();
+                .Find(query).FirstOrDefault();
+        }
+        
+       
+        
+        public IEnumerable<ProjectModel> Find(Expression<Func<ProjectModel, bool>> query)
+        {
+            return GetProjectCollection()
+                .Find(query);
         }
 
-        public int Insert(ProjectModel project)
+        public bool Exists(Expression<Func<ProjectModel, bool>> query)
+        {
+            return GetProjectCollection()
+                .Exists(query);
+        }
+        
+        public ObjectId Insert(ProjectModel project)
         {
             return GetProjectCollection()
                 .Insert(project);

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ModelViewerEditor.Data;
+using ModelViewerEditor.Helpers;
 
 namespace ModelViewerEditor
 {
@@ -21,12 +22,17 @@ namespace ModelViewerEditor
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<DbOptions>(Configuration.GetSection("LiteDbOptions"));
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddSingleton<IDbContext, DbContext>();
             services.AddTransient<IDataService, DataService>();
-            services.AddControllers();
-            // In production, the Angular files will be served from this directory
-            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonObjectIdConverter());
+
+                    // In production, the Angular files will be served from this directory
+                    services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
