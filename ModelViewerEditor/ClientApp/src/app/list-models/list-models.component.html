@@ -6,7 +6,7 @@
   </button>
 </mat-toolbar>
 <mat-selection-list [multiple]="false" (selectionChange)="on_SelectionChange($event)">
-  <mat-list-option *ngFor="let model of section.models" [value]="section.id">
+  <mat-list-option *ngFor="let model of section.models" [value]="model.id">
     {{model.name}}
   </mat-list-option>
 </mat-selection-list>

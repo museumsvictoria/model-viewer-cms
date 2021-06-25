@@ -1,7 +1,12 @@
 namespace ModelViewerEditor.Helpers
 {
-    public static class ObjectIdExtensions
+    public static class StringExtensions
     {
+
+        public static bool IsNullOrWhitespace(this string s)
+        {
+            return string.IsNullOrWhiteSpace(s);
+        }
         public static bool IsObjectId(this string s)
         {
             return s is {Length: 24} && TryParseHexString(s, out _);

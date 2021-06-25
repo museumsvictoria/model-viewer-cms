@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, EventEmitter, Output } from "@angular/core";
 import { Router } from "@angular/router";
 import { ProjectModel } from "../shared/models/projectModel";
 import { MatSelectionListChange } from "@angular/material/list";
@@ -16,6 +16,8 @@ export class ListSectionsComponent implements OnInit {
 
   @Input() project: ProjectModel;
 
+  @Output() sectionAdded = new EventEmitter<any>();
+
   ngOnInit(): void {}
 
   on_SelectionChange($event: MatSelectionListChange) {
@@ -31,7 +33,7 @@ export class ListSectionsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      //  this.dataService.getProjects().subscribe(x => this.projects = x);
+      this.sectionAdded.emit();
     });
   }
 }

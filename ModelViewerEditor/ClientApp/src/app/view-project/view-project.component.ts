@@ -16,13 +16,15 @@ export class ViewProjectComponent implements OnInit {
     private dataService: DataService
   ) {}
 
+  idFromRoute = "";
+
   ngOnInit() {
     const routeParams = this.route.snapshot.paramMap;
-    const idFromRoute = routeParams.get("projectId");
-    if (!idFromRoute) {
+    this.idFromRoute = routeParams.get("projectId");
+    if (!this.idFromRoute) {
       this.notFound = true;
     } else {
-      this.loadProject(idFromRoute);
+      this.loadProject(this.idFromRoute);
     }
   }
 
@@ -36,6 +38,7 @@ export class ViewProjectComponent implements OnInit {
             this.notFound = true;
           } else {
             this.project = project;
+            console.log(   this.project);
           }
         },
         (error) => (this.notFound = true)
@@ -44,4 +47,9 @@ export class ViewProjectComponent implements OnInit {
 
   notFound = false;
   project: ProjectModel;
+
+  onSectionAdded() {
+    console.log("onSectionAdded");
+    this.loadProject(this.idFromRoute);
+  }
 }

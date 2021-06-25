@@ -7,6 +7,7 @@ namespace ModelViewerEditor.Models
     {
         public SectionModel()
         {
+            Id = ObjectId.NewObjectId();
             Models = new List<ObjectModel>();
         }
 

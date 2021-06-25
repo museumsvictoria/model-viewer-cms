@@ -31,7 +31,7 @@ export class NewSectionDialogComponent implements OnInit {
   ngOnInit(): void {}
   onSubmit_click() {
     this.dataService
-      .addSection(this.data.project, this.sectionName.value)
+      .addSection(this.data.project.id, this.sectionName.value)
       .subscribe(
         () => {
           this.dialogRef.close();
@@ -47,7 +47,7 @@ export class NewSectionDialogComponent implements OnInit {
   validateNameViaServer(
     ctrl: AbstractControl
   ): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
-    var r = this.data.project.sections.some(x => x.name.trim().toLowerCase() == ctrl.value.trim().toLowerCase());
+    const r = this.data.project.sections && this.data.project.sections.some(x => x.name && x.name.trim().toLowerCase() == ctrl.value.trim().toLowerCase());
     return of(r ? { nameExists: true } : null);
 
   }

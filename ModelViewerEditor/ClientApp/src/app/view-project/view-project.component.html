@@ -5,6 +5,6 @@
   <p *ngIf="notFound" class="mat-error">Not found</p>
   <div *ngIf="project">
     <h2 class="mat-h2">{{project.name}}</h2>
-    <app-list-sections [project]="project"></app-list-sections></div>
+    <app-list-sections [project]="project" (sectionAdded)="onSectionAdded()"></app-list-sections></div>
 </div>
 

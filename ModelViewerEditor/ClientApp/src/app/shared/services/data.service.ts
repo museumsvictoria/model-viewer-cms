@@ -23,51 +23,6 @@ export class DataService {
     }),
   };
 
-  // private httpOptions = {
-  //   headers: new Headers({ "Content-Type": "application/json" }),
-  // };
-
-  private serverProjects: ProjectModel[];
-
-  private static initProjectList(): ProjectModel[] {
-    const p = new ProjectModel();
-    p.id = "1";
-    p.addedBy = "Forbes";
-    p.name = "Test project";
-    p.sections = [
-      {
-        id: "1",
-        name: "Section 1",
-        models: [
-          {
-            id: "1",
-            name: "object 1",
-            fileName: "model.glb",
-            hotspots: [
-              {
-                id: "1",
-                text: "This is hotspot 1",
-                dataNormal: "",
-                dataPosition: "",
-                cameraOrbit: "",
-                fieldOfView: "",
-              },
-              {
-                id: "2",
-                text: "This is hotspot 2",
-                dataNormal: "",
-                dataPosition: "",
-                cameraOrbit: "",
-                fieldOfView: "",
-              },
-            ],
-          },
-        ],
-      },
-    ];
-    return [p];
-  }
-
   getProjects(): Observable<ProjectModel[]> {
     return this.http.get<ProjectModel[]>(`${this.baseUrl}get-projects`);
   }
@@ -83,8 +38,7 @@ export class DataService {
     if (!name) {
       return throwError("Project name is empty");
     }
-    var body = `"${name}"`;
-
+    const body = `"${name}"`;
     return this.http.post<any>(
       `${this.baseUrl}add-project`,
       body,
@@ -92,37 +46,40 @@ export class DataService {
     );
   }
 
-  addSection(project: ProjectModel, name: string): Observable<any> {
-    if (!project) {
-      return throwError("Project is null");
+  addSection(projectId: string, sectionName: string): Observable<any> {
+    if (!projectId) {
+      return throwError("ProjectId is null");
     }
-    if (!name) {
+    if (!sectionName) {
       return throwError("Section name is empty");
     }
-    const p = new SectionModel();
-    p.name = name;
-    p.id = String(project.sections.length + 1);
-    project.sections.push(p);
-    return of(true);
-  }
-
-  projectExists(name: string): Observable<boolean> {
-    return this.http.get<boolean>(
-      `${this.baseUrl}project-exists?name=${name}`
+    const body = { projectId, sectionName };
+    return this.http.post<any>(
+      `${this.baseUrl}add-section`,
+      body,
+      this.httpOptions
     );
   }
 
-  addModel(section: SectionModel, name: string) {
-    if (!section) {
-      return throwError("Section is null");
+  projectExists(name: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.baseUrl}project-exists?name=${name}`);
+  }
+
+  addModel(projectId: string, sectionId, modelName: string) {
+    if (!projectId) {
+      return throwError("ProjectId is null");
     }
-    if (!name) {
+    if (!sectionId) {
+      return throwError("sectionId is null");
+    }
+    if (!modelName) {
       return throwError("Model name is empty");
     }
-    const p = new ObjectModel();
-    p.name = name;
-    p.id = String(section.models.length + 1);
-    section.models.push(p);
-    return of(true);
+    const body = { projectId, sectionId, modelName };
+    return this.http.post<any>(
+      `${this.baseUrl}add-model`,
+      body,
+      this.httpOptions
+    );
   }
 }

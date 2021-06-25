@@ -7,6 +7,7 @@ namespace ModelViewerEditor.Models
     {
         public ObjectModel()
         {
+            Id = ObjectId.NewObjectId();
             Hotspots = new List<HotspotModel>();
         }
 

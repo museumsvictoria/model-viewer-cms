@@ -19,7 +19,8 @@ import { SectionModel } from "../shared/models/sectionModel";
 })
 export class NewModelDialogComponent implements OnInit {
   constructor(
-    @Inject(MAT_DIALOG_DATA) private data: { section: SectionModel },
+    @Inject(MAT_DIALOG_DATA)
+    private data: { projectId: string; section: SectionModel },
     private dataService: DataService,
     private dialogRef: MatDialogRef<NewModelDialogComponent>
   ) {}
@@ -32,7 +33,7 @@ export class NewModelDialogComponent implements OnInit {
   ngOnInit(): void {}
   onSubmit_click() {
     this.dataService
-      .addModel(this.data.section, this.modelName.value)
+      .addModel(this.data.projectId, this.data.section.id, this.modelName.value)
       .subscribe(
         () => {
           this.dialogRef.close();

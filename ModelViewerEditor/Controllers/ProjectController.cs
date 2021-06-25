@@ -50,7 +50,7 @@ namespace ModelViewerEditor.Controllers
         }
         
         [HttpPost("add-project")]
-        public ActionResult Post([FromBody]string name)
+        public ActionResult AddProject([FromBody]string name)
         {
             var p = new ProjectModel {Name = name};
             var id = _dataService.Insert(p);
@@ -60,6 +60,146 @@ namespace ModelViewerEditor.Controllers
             return BadRequest();
         }
         
+        [HttpPost("add-section")]
+        public ActionResult AddSection(AddSectionDto dto)
+        {
+            if (!dto.ProjectId.IsObjectId())
+            {
+                return BadRequest("Project not found");
+            }
+            
+            if (dto.SectionName.IsNullOrWhitespace())
+            {
+                return BadRequest("Section name missing");
+            }
+            
+            var project = _dataService.Get(new ObjectId(dto.ProjectId));
+            if (project == null)
+            {
+                return BadRequest("Project not found");
+            }   
+            
+            if(project.Sections.Any(x => string.Equals(x.Name, dto.SectionName, StringComparison.CurrentCultureIgnoreCase)))
+            {
+                return BadRequest("There is already a section with this name");
+            }
+            
+            var section = new SectionModel {Name = dto.SectionName.Trim()};
+            project.Sections.Add(section);
+            
+            _dataService.Update(project);
+            
+            return NoContent();
+        }
+
+        [HttpGet("section-exists")]
+        public ActionResult<bool> SectionExists(AddSectionDto dto)
+        {
+            if (!dto.ProjectId.IsObjectId())
+            {
+                return BadRequest("Project not found");
+            }
+
+            if (dto.SectionName.IsNullOrWhitespace())
+            {
+                return BadRequest("Section name missing");
+            }
+
+            var project = _dataService.Get(new ObjectId(dto.ProjectId));
+            if (project == null)
+            {
+                return BadRequest("Project not found");
+            }
+
+            return project.Sections.Any(x =>
+                string.Equals(x.Name, dto.SectionName, StringComparison.CurrentCultureIgnoreCase));
+          
+
+        }
+        
+        
+        
+        
+        [HttpPost("add-model")]
+        public ActionResult AddModel(AddModelDto dto)
+        {
+            if (!dto.ProjectId.IsObjectId())
+            {
+                return BadRequest("Project not found");
+            }
+            
+            if (!dto.SectionId.IsObjectId())
+            {
+                return BadRequest("Section not found");
+            }
+            
+            if (dto.ModelName.IsNullOrWhitespace())
+            {
+                return BadRequest("Model name missing");
+            }
+            
+            var project = _dataService.Get(new ObjectId(dto.ProjectId));
+            if (project == null)
+            {
+                return BadRequest("Project not found");
+            }
+
+            var section = project.Sections.FirstOrDefault(x => x.Id.ToString() == dto.SectionId);
+
+            if (section == null)
+            {
+                return BadRequest("Section not found"); 
+            }
+            
+            if(section.Models.Any(x => string.Equals(x.Name, dto.ModelName, StringComparison.CurrentCultureIgnoreCase)))
+            {
+                return BadRequest("There is already a model with this name");
+            }
+            
+            var model = new ObjectModel() {Name = dto.ModelName.Trim()};
+            
+            section.Models.Add(model);
+            
+            _dataService.Update(project);
+            
+            return NoContent();
+        }
+
+        [HttpGet("model-exists")]
+        public ActionResult<bool> ModelExists(AddModelDto dto)
+        {
+            if (!dto.ProjectId.IsObjectId())
+            {
+                return BadRequest("Project not found");
+            }
+            
+            if (!dto.SectionId.IsObjectId())
+            {
+                return BadRequest("Section not found");
+            }
+            
+            if (dto.ModelName.IsNullOrWhitespace())
+            {
+                return BadRequest("Model name missing");
+            }
+            
+            var project = _dataService.Get(new ObjectId(dto.ProjectId));
+            if (project == null)
+            {
+                return BadRequest("Project not found");
+            }
+
+            var section = project.Sections.FirstOrDefault(x => x.Id.ToString() == dto.SectionId);
+
+            if (section == null)
+            {
+                return BadRequest("Section not found"); 
+            }
+            
+            return section.Models.Any(x => string.Equals(x.Name, dto.ModelName, StringComparison.CurrentCultureIgnoreCase));
+
+        }
+
         [HttpPut("update-project")]
         public ActionResult Put(ProjectModel dto)
         {

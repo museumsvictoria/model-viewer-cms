@@ -4,6 +4,11 @@ namespace ModelViewerEditor.Models
 {
     public class HotspotModel
     {
+        public HotspotModel()
+        {
+            Id = ObjectId.NewObjectId();
+        }
+        
         public ObjectId Id {get;set;}
         public string Text {get;set;}
         public string  DataPosition {get;set;}
