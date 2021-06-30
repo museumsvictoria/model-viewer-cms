@@ -1,9 +1,9 @@
 namespace ModelViewerEditor.Models
 {
-    public class AddSectionDto
+    public class DeleteSectionDto
     {
         public string ProjectId { get; set; }
-        public string SectionName { get; set; }
+        public string SectionId { get; set; }
 
     }
 }

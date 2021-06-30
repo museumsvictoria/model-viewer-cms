@@ -26,8 +26,9 @@ import { ViewSectionComponent } from "./view-section/view-section.component";
 import { NewSectionDialogComponent } from "./new-section-dialog/new-section-dialog.component";
 import { NewModelDialogComponent } from "./new-model-dialog/new-model-dialog.component";
 import { ViewModelComponent } from "./view-model/view-model.component";
-import { ListModelsComponent } from './list-models/list-models.component';
-import { ListHotspotsComponent } from './list-hotspots/list-hotspots.component';
+import { ListModelsComponent } from "./list-models/list-models.component";
+import { ListHotspotsComponent } from "./list-hotspots/list-hotspots.component";
+import { ConfirmDialogComponent } from "./shared/confirm-dialog/confirm-dialog.component";
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { ListHotspotsComponent } from './list-hotspots/list-hotspots.component';
     ViewModelComponent,
     ListModelsComponent,
     ListHotspotsComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,

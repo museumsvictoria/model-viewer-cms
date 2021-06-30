@@ -1,10 +1,15 @@
 <mat-toolbar>
-  <span>Model Editor: <a [routerLink]="['/']">Projects</a>  > {{project ? project.name : ' (not found)'}}</span>
+  <span *ngIf="notFound">Model Editor</span>
+  <span *ngIf="!project && !notFound">Loading...</span>
+  <span *ngIf="project && !notFound">Model Editor: <a [routerLink]="['/']">Projects</a>  > {{project.name}}</span>
 </mat-toolbar>
 <div class="container">
   <p *ngIf="notFound" class="mat-error">Not found</p>
-  <div *ngIf="project">
-    <h2 class="mat-h2">{{project.name}}</h2>
-    <app-list-sections [project]="project" (sectionAdded)="onSectionAdded()"></app-list-sections></div>
-</div>
+  <ng-container *ngIf="project">
+    <h2 class="mat-h2">{{ project.name }}</h2>
+    <button (click)="onDeleteClick()">Delete Project</button>
+    <app-list-sections [project]="project" (sectionAdded)="onSectionAdded()"></app-list-sections>
 
+
+  </ng-container>
+</div>

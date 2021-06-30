@@ -3,7 +3,9 @@ import { ProjectModel } from "../shared/models/projectModel";
 import { DataService } from "../shared/services/data.service";
 import { MatDialog } from "@angular/material/dialog";
 import { first } from "rxjs/operators";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { ConfirmDialogService } from "../shared/services/confirm-dialog.service";
 
 @Component({
   selector: "app-view-project",
@@ -13,7 +15,10 @@ import { ActivatedRoute } from "@angular/router";
 export class ViewProjectComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
-    private dataService: DataService
+    private _router: Router,
+    private dataService: DataService,
+    private confirmDialogService: ConfirmDialogService,
+    private _snackBar: MatSnackBar
   ) {}
 
   idFromRoute = "";
@@ -38,10 +43,12 @@ export class ViewProjectComponent implements OnInit {
             this.notFound = true;
           } else {
             this.project = project;
-            console.log(   this.project);
+            console.log(this.project);
           }
         },
-        (error) => (this.notFound = true)
+        (error) => {
+          this.notFound = true;
+        }
       );
   }
 
@@ -51,5 +58,25 @@ export class ViewProjectComponent implements OnInit {
   onSectionAdded() {
     console.log("onSectionAdded");
     this.loadProject(this.idFromRoute);
+  }
+
+  onDeleteClick() {
+    this.confirmDialogService.confirmDialog(
+      "Delete Project",
+      "This is irreversible! Are you sure?",
+      (result) => {
+        if (!result) {
+          return;
+        }
+        this.dataService.deleteProject(this.project.id)
+          .subscribe( () => {
+            this._router.navigate([""]);
+          },
+          (err) => {
+            this.confirmDialogService.showHttpError(err)
+          }
+        );
+      }
+    );
   }
 }

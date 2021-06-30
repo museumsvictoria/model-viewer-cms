@@ -1,13 +1,23 @@
 <mat-toolbar class="breadcrumb">
-  <span>Model Editor: <a [routerLink]="['/']">Projects</a></span>
-  <span *ngIf="project"><a [routerLink]="['/', 'project', project.id]">{{project.name}}</a> </span>
-  <span *ngIf="section"><a [routerLink]="['/', 'project', project.id, section.id]">{{section.name}}</a> </span>
-  <span>{{model ? model.name : ' (not found)'}}
+  <span *ngIf="notFound">Model Editor</span>
+  <span *ngIf="!model && !notFound">Loading...</span>
+
+  <ng-container *ngIf="model">
+    <span>Model Editor: <a [routerLink]="['/']">Projects</a></span>
+    <span *ngIf="project"><a [routerLink]="['/', 'project', project.id]">{{project.name}}</a> </span>
+    <span *ngIf="section"><a [routerLink]="['/', 'project', project.id, section.id]">{{section.name}}</a> </span>
+    <span>{{model ? model.name : ' (not found)'}}
   </span>
+  </ng-container>
+
 </mat-toolbar>
+
 <div class="container">
   <p *ngIf="notFound" class="mat-error">Not found</p>
-  <h2  *ngIf="model" class="mat-h2">{{model.name}}</h2>
-  <h3>Hotspots</h3>
-  <app-list-hotspots [model]="model" (hotspotSelect)="onHotspotSelect($event)"></app-list-hotspots>
+  <ng-container *ngIf="model">
+    <h2 class="mat-h2">{{model.name}}</h2>
+    <button (click)="onDeleteClick()">Delete Model</button>
+    <h3>Hotspots</h3>
+    <app-list-hotspots [model]="model" (hotspotSelect)="onHotspotSelect($event)"></app-list-hotspots>
+  </ng-container>
 </div>

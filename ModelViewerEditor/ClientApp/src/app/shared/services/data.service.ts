@@ -1,11 +1,6 @@
 import { Inject, Injectable } from "@angular/core";
 import { ProjectModel } from "../models/projectModel";
-import { DataServiceResponse } from "./dataServiceResponse";
 import { EMPTY, Observable, of, throwError } from "rxjs";
-import { first, map, switchMap, tap } from "rxjs/operators";
-import { flatMap } from "rxjs/internal/operators";
-import { ObjectModel } from "../models/objectModel";
-import { SectionModel } from "../models/sectionModel";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 @Injectable({
@@ -57,6 +52,55 @@ export class DataService {
     return this.http.post<any>(
       `${this.baseUrl}add-section`,
       body,
+      this.httpOptions
+    );
+  }
+
+  deleteSection(projectId: string, sectionId: string): Observable<any> {
+    if (!projectId) {
+      return throwError("ProjectId is null");
+    }
+    if (!sectionId) {
+      return throwError("sectionId is empty");
+    }
+    const body = { projectId, sectionId };
+    return this.http.post<any>(
+      `${this.baseUrl}delete-section`,
+      body,
+      this.httpOptions
+    );
+  }
+
+  deleteModel(
+    projectId: string,
+    sectionId: string,
+    modelId: string
+  ): Observable<any> {
+    if (!projectId) {
+      return throwError("ProjectId is null");
+    }
+    if (!sectionId) {
+      return throwError("sectionId is empty");
+    }
+    if (!modelId) {
+      return throwError("modelId is empty");
+    }
+    const body = { projectId, sectionId, modelId };
+    return this.http.post<any>(
+      `${this.baseUrl}delete-model`,
+      body,
+      this.httpOptions
+    );
+  }
+
+  deleteProject(projectId: string): Observable<any> {
+    if (!projectId) {
+      return throwError("ProjectId is null");
+    }
+
+    return this.http.post<any>(
+      `${this.baseUrl}delete-project`,
+    '"' +  projectId +'"',
       this.httpOptions
     );
   }
