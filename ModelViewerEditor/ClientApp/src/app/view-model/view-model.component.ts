@@ -1,12 +1,12 @@
 import { Component, OnInit } from "@angular/core";
-import {ActivatedRoute, Router} from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { DataService } from "../shared/services/data.service";
 import { first } from "rxjs/operators";
 import { ProjectModel } from "../shared/models/projectModel";
 import { ObjectModel } from "../shared/models/objectModel";
 import { HotspotModel } from "../shared/models/hotspotModel";
 import { SectionModel } from "../shared/models/sectionModel";
-import {ConfirmDialogService} from "../shared/services/confirm-dialog.service";
+import { ConfirmDialogService } from "../shared/services/confirm-dialog.service";
 
 @Component({
   selector: "app-view-model",
@@ -21,23 +21,15 @@ export class ViewModelComponent implements OnInit {
     private confirmDialogService: ConfirmDialogService
   ) {}
 
-   projectId = "";
-   sectionId = "";
-   modelId = "";
-
   ngOnInit() {
     const routeParams = this.route.snapshot.paramMap;
-     this.projectId = routeParams.get("projectId");
-    this.sectionId = routeParams.get("sectionId");
-    this.modelId = routeParams.get("modelId");
-    if (!this.projectId) {
+    const projectId = routeParams.get("projectId");
+    const sectionId = routeParams.get("sectionId");
+    const modelId = routeParams.get("modelId");
+    if (!projectId) {
       this.notFound = true;
     } else {
-      this.loadProjectAndSection(
-        this.projectId,
-        this.sectionId,
-        this.modelId
-      );
+      this.loadProjectAndSection(projectId, sectionId, modelId);
     }
   }
 
@@ -81,12 +73,18 @@ export class ViewModelComponent implements OnInit {
         if (!result) {
           return;
         }
-        this.dataService.deleteModel(this.projectId, this.sectionId, this.modelId)
-          .subscribe( () => {
-              this._router.navigate(['project', this.projectId, this.sectionId]);
+        this.dataService
+          .deleteModel(this.project.id, this.section.id, this.model.id)
+          .subscribe(
+            () => {
+              this._router.navigate([
+                "project",
+                this.project.id,
+                this.section.id,
+              ]);
             },
             (err) => {
-              this.confirmDialogService.showHttpError(err)
+              this.confirmDialogService.showHttpError(err);
             }
           );
       }

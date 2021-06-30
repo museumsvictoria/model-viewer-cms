@@ -29,6 +29,8 @@ import { ViewModelComponent } from "./view-model/view-model.component";
 import { ListModelsComponent } from "./list-models/list-models.component";
 import { ListHotspotsComponent } from "./list-hotspots/list-hotspots.component";
 import { ConfirmDialogComponent } from "./shared/confirm-dialog/confirm-dialog.component";
+import {NgxFileDropModule} from "ngx-file-drop";
+import { FileUploadComponent } from './shared/file-upload/file-upload.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +49,7 @@ import { ConfirmDialogComponent } from "./shared/confirm-dialog/confirm-dialog.c
     ListModelsComponent,
     ListHotspotsComponent,
     ConfirmDialogComponent,
+    FileUploadComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,6 +57,7 @@ import { ConfirmDialogComponent } from "./shared/confirm-dialog/confirm-dialog.c
     FlexLayoutModule,
     FormsModule,
     BrowserAnimationsModule,
+    NgxFileDropModule,
     MatDialogModule,
     MatToolbarModule,
     MatIconModule,

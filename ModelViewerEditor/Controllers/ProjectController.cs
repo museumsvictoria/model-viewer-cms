@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using LiteDB;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
@@ -19,10 +22,13 @@ namespace ModelViewerEditor.Controllers
 
         private readonly ILogger<ProjectController> _logger;
         private readonly IDataService _dataService;
-        public ProjectController(ILogger<ProjectController> logger, IDataService dataService)
+        private readonly IWebHostEnvironment _hostingEnvironment;
+
+        public ProjectController(ILogger<ProjectController> logger, IDataService dataService, IWebHostEnvironment hostingEnvironment)
         {
             _logger = logger;
             _dataService = dataService;
+            _hostingEnvironment = hostingEnvironment;
         }
         
         [HttpGet("get-projects")]
@@ -142,6 +148,12 @@ namespace ModelViewerEditor.Controllers
             
             _dataService.Delete(new ObjectId(projectId));
             
+            var filePath = Path.Join(_hostingEnvironment.WebRootPath, "models", projectId);
+            if (Directory.Exists(filePath))
+            {
+                Directory.Delete(filePath, true);
+            }
+            
             return NoContent();
         }
         
@@ -172,6 +184,12 @@ namespace ModelViewerEditor.Controllers
             }
             
             _dataService.Update(project);
+            
+            var filePath = Path.Join(_hostingEnvironment.WebRootPath, "models", dto.ProjectId, dto.SectionId);
+            if (Directory.Exists(filePath))
+            {
+                Directory.Delete(filePath, true);
+            }
             
             return NoContent();
         }
@@ -215,8 +233,63 @@ namespace ModelViewerEditor.Controllers
             
             _dataService.Update(project);
             
+            var filePath = Path.Join(_hostingEnvironment.WebRootPath, "models", dto.ProjectId, dto.SectionId, dto.ModelId + ".glb");
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+     
+            
+            
             return NoContent();
         }
+
+        /*
+        [HttpPost("upload")]
+        public  ActionResult Upload()
+        {
+          //  long size = request.File.Sum(f => f.Length);
+          var f = Request;
+          //   var formFile = request.File;
+          // if (formFile.Length > 0)
+          // {
+          //     var filePath = Path.GetTempFileName();
+          //
+          //     using (var stream = System.IO.File.Create(filePath))
+          //     {
+          //         //  await formFile.CopyToAsync(stream);
+          //     }
+          // }
+
+          // Process uploaded files
+          // Don't rely on or trust the FileName property without validation.
+
+          //  return Ok(new { count = request.File.Length });
+          return Ok();
+        }*/
+        
+        [HttpPost("upload"), DisableRequestSizeLimit]
+        public  async Task<IActionResult> UploadDocument([FromForm] string projectId, [FromForm] string sectionId, [FromForm] string modelId, [FromForm] IFormFile file)
+        {
+           
+                if (file.Length <= 0) return BadRequest("File length is zero");
+                if (Path.GetExtension(file.FileName) != ".glb")
+                {
+                    return BadRequest("Incorrect file type (expecting .glb file)");
+                }
+
+                var projectDir = Path.Join(_hostingEnvironment.WebRootPath, "models", projectId, sectionId);
+                if (!Directory.Exists(projectDir))
+                    Directory.CreateDirectory(projectDir);
+                
+                var filePath = Path.Join(projectDir, modelId + ".glb");
+
+                    await using var stream = System.IO.File.Create(filePath);
+                    await file.CopyToAsync(stream);
+                    return Ok();
+            }        
+        
+
 
 
         [HttpGet("project-exists")]

@@ -19,5 +19,6 @@
     <button (click)="onDeleteClick()">Delete Model</button>
     <h3>Hotspots</h3>
     <app-list-hotspots [model]="model" (hotspotSelect)="onHotspotSelect($event)"></app-list-hotspots>
+    <app-file-upload [projectId]="project.id" [sectionId]="section.id" [modelId]="model.id"></app-file-upload>
   </ng-container>
 </div>

@@ -100,7 +100,7 @@ export class DataService {
 
     return this.http.post<any>(
       `${this.baseUrl}delete-project`,
-    '"' +  projectId +'"',
+      '"' + projectId + '"',
       this.httpOptions
     );
   }
@@ -111,7 +111,7 @@ export class DataService {
 
   addModel(projectId: string, sectionId, modelName: string) {
     if (!projectId) {
-      return throwError("ProjectId is null");
+      return throwError("projectId is null");
     }
     if (!sectionId) {
       return throwError("sectionId is null");
@@ -125,5 +125,28 @@ export class DataService {
       body,
       this.httpOptions
     );
+  }
+
+  uploadGlb(
+    file: File,
+    projectId: string,
+    sectionId: string,
+    modelId: string
+  ): Observable<any> {
+    console.log("uploadGlb");
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("projectId", projectId);
+    formData.append("sectionId", sectionId);
+    formData.append("modelId", modelId);
+
+    let options = {
+      headers: new HttpHeaders({
+        "Content-Type": "false",
+      }),
+    };
+    // 'Content-Type': multipart/form-data
+    return this.http.post(`${this.baseUrl}upload`, formData);
   }
 }
