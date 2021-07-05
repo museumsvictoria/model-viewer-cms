@@ -1,5 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { AppComponent } from "./app.component";
@@ -29,8 +29,8 @@ import { ViewModelComponent } from "./view-model/view-model.component";
 import { ListModelsComponent } from "./list-models/list-models.component";
 import { ListHotspotsComponent } from "./list-hotspots/list-hotspots.component";
 import { ConfirmDialogComponent } from "./shared/confirm-dialog/confirm-dialog.component";
-import {NgxFileDropModule} from "ngx-file-drop";
-import { FileUploadComponent } from './shared/file-upload/file-upload.component';
+import { NgxFileDropModule } from "ngx-file-drop";
+import { FileUploadComponent } from "./shared/file-upload/file-upload.component";
 
 @NgModule({
   declarations: [
@@ -72,5 +72,6 @@ import { FileUploadComponent } from './shared/file-upload/file-upload.component'
   ],
   providers: [],
   bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}

@@ -1,4 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import {
+  AfterContentInit,
+  AfterViewInit,
+  Component,
+  Inject,
+  OnInit,
+} from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DataService } from "../shared/services/data.service";
 import { first } from "rxjs/operators";
@@ -7,7 +13,7 @@ import { ObjectModel } from "../shared/models/objectModel";
 import { HotspotModel } from "../shared/models/hotspotModel";
 import { SectionModel } from "../shared/models/sectionModel";
 import { ConfirmDialogService } from "../shared/services/confirm-dialog.service";
-
+import "@google/model-viewer";
 @Component({
   selector: "app-view-model",
   templateUrl: "./view-model.component.html",
@@ -18,7 +24,8 @@ export class ViewModelComponent implements OnInit {
     private route: ActivatedRoute,
     private _router: Router,
     private dataService: DataService,
-    private confirmDialogService: ConfirmDialogService
+    private confirmDialogService: ConfirmDialogService,
+    @Inject("BASE_URL") private baseUrl: string
   ) {}
 
   ngOnInit() {
@@ -32,6 +39,8 @@ export class ViewModelComponent implements OnInit {
       this.loadProjectAndSection(projectId, sectionId, modelId);
     }
   }
+
+
 
   private loadProjectAndSection(
     projectId: string,
@@ -47,6 +56,8 @@ export class ViewModelComponent implements OnInit {
             this.project = project;
             this.section = project.sections.find((x) => x.id == sectionId);
             this.model = this.section.models.find((x) => x.id == modelId);
+            this.checkGlbExists();
+
           }
           if (!this.project || !this.section) {
             this.notFound = true;
@@ -89,5 +100,28 @@ export class ViewModelComponent implements OnInit {
           );
       }
     );
+  }
+
+  private checkGlbExists() {
+    console.log("checkGlbExists");
+    if (!this.project.id || !this.section.id || !this.model.id) {
+      this.glbExists = false;
+    }
+    this.dataService
+      .glbExists(this.project.id, this.section.id, this.model.id)
+      .subscribe((result) => {
+        this.glbExists = result;
+        console.log(result);
+      });
+  }
+
+  public glbExists = false;
+
+  get modelSource(): string {
+    return `${this.baseUrl}models/${this.project.id}/${this.section.id}/${this.model.id}.glb`;
+  }
+
+  onFileUpload() {
+    this.checkGlbExists();
   }
 }

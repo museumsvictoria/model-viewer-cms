@@ -55,6 +55,7 @@
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
+import '@google/model-viewer/dist/model-viewer.min';
 import 'zone.js/dist/zone';  // Included with Angular CLI.
 
 

@@ -1,9 +1,12 @@
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using ModelViewerEditor.Data;
 using ModelViewerEditor.Helpers;
@@ -51,6 +54,20 @@ namespace ModelViewerEditor
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            
+            var provider = new FileExtensionContentTypeProvider();
+            // Add new mappings
+            provider.Mappings[".glb"] = "model/model/gltf-binary";
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+                 ContentTypeProvider = provider
+            });
+            
+            
+            
             if (!env.IsDevelopment())
             {
                 app.UseSpaStaticFiles();

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import {Component, Input, OnInit, Output, EventEmitter} from "@angular/core";
 import {
   FileSystemDirectoryEntry,
   FileSystemFileEntry,
@@ -20,6 +20,8 @@ export class FileUploadComponent implements OnInit {
   @Input() sectionId: string;
   @Input() modelId: string;
 
+  @Output() upload = new EventEmitter<any>();
+
   public files: NgxFileDropEntry[] = [];
 
   public dropped(files: NgxFileDropEntry[]) {
@@ -33,7 +35,7 @@ export class FileUploadComponent implements OnInit {
 
           this._dataService
             .uploadGlb(file, this.projectId, this.sectionId, this.modelId)
-            .subscribe((x) => console.log(x));
+            .subscribe((x) => this.upload.emit());
         });
       } else {
       }

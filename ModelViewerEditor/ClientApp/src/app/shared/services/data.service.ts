@@ -149,4 +149,14 @@ export class DataService {
     // 'Content-Type': multipart/form-data
     return this.http.post(`${this.baseUrl}upload`, formData);
   }
+
+  glbExists(
+    projectId: string,
+    sectionId: string,
+    modelId: string
+  ): Observable<boolean> {
+    return this.http.get<boolean>(
+      `${this.baseUrl}glb-exists?projectId=${projectId}&sectionId=${sectionId}&modelId=${modelId}`
+    );
+  }
 }

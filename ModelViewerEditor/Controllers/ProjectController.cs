@@ -269,7 +269,7 @@ namespace ModelViewerEditor.Controllers
         }*/
         
         [HttpPost("upload"), DisableRequestSizeLimit]
-        public  async Task<IActionResult> UploadDocument([FromForm] string projectId, [FromForm] string sectionId, [FromForm] string modelId, [FromForm] IFormFile file)
+        public  async Task<IActionResult> Upload([FromForm] string projectId, [FromForm] string sectionId, [FromForm] string modelId, [FromForm] IFormFile file)
         {
            
                 if (file.Length <= 0) return BadRequest("File length is zero");
@@ -361,6 +361,15 @@ namespace ModelViewerEditor.Controllers
             }
             
             return section.Models.Any(x => string.Equals(x.Name, dto.ModelName, StringComparison.CurrentCultureIgnoreCase));
+
+        }
+        
+        [HttpGet("glb-exists")]
+        public ActionResult<bool> GlbExists(string projectId, string sectionId, string modelId)
+        {
+               var filePath = Path.Join(_hostingEnvironment.WebRootPath, "models", projectId, sectionId, modelId + ".glb");
+
+               return System.IO.File.Exists(filePath);
 
         }
 

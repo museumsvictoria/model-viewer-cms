@@ -19,6 +19,14 @@
     <button (click)="onDeleteClick()">Delete Model</button>
     <h3>Hotspots</h3>
     <app-list-hotspots [model]="model" (hotspotSelect)="onHotspotSelect($event)"></app-list-hotspots>
-    <app-file-upload [projectId]="project.id" [sectionId]="section.id" [modelId]="model.id"></app-file-upload>
+    <app-file-upload [projectId]="project.id" [sectionId]="section.id" [modelId]="model.id" *ngIf="!glbExists" (upload)="onFileUpload()"></app-file-upload>
+
+    <model-viewer [src]="modelSource" loading="eager" field-of-view='auto' interpolation-decay="100" loading="eager"
+                  min-field-of-view='auto' max-field-of-view='auto' camera-controls
+                  touch-action="none" #modelViewer>
+
+
+
+    </model-viewer>
   </ng-container>
 </div>
