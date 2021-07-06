@@ -14,6 +14,8 @@ import { HotspotModel } from "../shared/models/hotspotModel";
 import { SectionModel } from "../shared/models/sectionModel";
 import { ConfirmDialogService } from "../shared/services/confirm-dialog.service";
 import "@google/model-viewer";
+import { NewModelDialogComponent } from "../new-model-dialog/new-model-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
 @Component({
   selector: "app-view-model",
   templateUrl: "./view-model.component.html",
@@ -25,6 +27,7 @@ export class ViewModelComponent implements OnInit {
     private _router: Router,
     private dataService: DataService,
     private confirmDialogService: ConfirmDialogService,
+    private dialog: MatDialog,
     @Inject("BASE_URL") private baseUrl: string
   ) {}
 
@@ -39,8 +42,6 @@ export class ViewModelComponent implements OnInit {
       this.loadProjectAndSection(projectId, sectionId, modelId);
     }
   }
-
-
 
   private loadProjectAndSection(
     projectId: string,
@@ -57,7 +58,6 @@ export class ViewModelComponent implements OnInit {
             this.section = project.sections.find((x) => x.id == sectionId);
             this.model = this.section.models.find((x) => x.id == modelId);
             this.checkGlbExists();
-
           }
           if (!this.project || !this.section) {
             this.notFound = true;
@@ -76,7 +76,7 @@ export class ViewModelComponent implements OnInit {
     console.log(hotspot);
   }
 
-  onDeleteClick() {
+  onDelete_click() {
     this.confirmDialogService.confirmDialog(
       "Delete Section",
       "This is irreversible! Are you sure?",
@@ -100,6 +100,18 @@ export class ViewModelComponent implements OnInit {
           );
       }
     );
+  }
+
+  onNewHotspot_click() {
+    const dialogRef = this.dialog.open(NewModelDialogComponent, {
+      height: "400px",
+      width: "600px",
+      data: { projectId: this.project.id, section: this.section },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+     // this.modelAdded.emit();
+    });
   }
 
   private checkGlbExists() {

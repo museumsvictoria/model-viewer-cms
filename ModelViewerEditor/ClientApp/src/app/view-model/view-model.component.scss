@@ -1,0 +1,25 @@
+.main {
+  height: 100vh;
+}
+
+model-viewer {
+  height: 100%;
+  width: 100%;
+}
+.wrapper {
+  flex: 2;
+  padding: 5px;
+}
+
+.control-bar {
+  padding: 10px;
+}
+
+.sidebar {
+  border-right: 1px solid #999;
+}
+.sidebar-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
