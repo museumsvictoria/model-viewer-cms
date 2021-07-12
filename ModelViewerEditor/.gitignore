@@ -232,3 +232,10 @@ _Pvt_Extensions
 
 /LiteDb/LiteDbTest.db
 /LiteDb/LiteDbTest-log.db
+
+.DS_Store
+*.glb
+dotnet-tools.json
+.dbtcache.v2
+.suo
+applicationhost.config

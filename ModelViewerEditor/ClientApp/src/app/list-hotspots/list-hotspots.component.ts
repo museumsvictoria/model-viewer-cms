@@ -18,12 +18,17 @@ export class ListHotspotsComponent implements OnInit {
 
   @Input() model: ObjectModel;
 
-  @Output() hotspotSelect = new EventEmitter<HotspotModel>();
+  @Output() selectHotspot = new EventEmitter<HotspotModel>();
+
+  @Output() goToHotspot = new EventEmitter<HotspotModel>();
 
   ngOnInit(): void {}
 
-  on_SelectionChange($event: MatSelectionListChange) {
-    let hotspot = $event.options[0].value;
-    this.hotspotSelect.emit(hotspot);
+  onGoToHotspot(hotspot: HotspotModel) {
+    this.goToHotspot.emit(hotspot);
+  }
+
+  onSelectHotspot(hotspot: HotspotModel) {
+    this.selectHotspot.emit(hotspot);
   }
 }

@@ -15,25 +15,34 @@ code {
   border-color: #1861ac;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 .spacer {
   flex: 1 1 auto;
 }
 
-.container{
+.container {
   padding: 20px;
 }
 
-.breadcrumb{
-  span, a{
-    &:not(:last-child){
-      margin-right: 0.3em;
-      &::after {
-        content: " > ";
-      }
-    }
+.control-bar {
+  padding: 10px;
+  border-bottom: 1px solid #999;
 
+  button{
+    margin-right: 20px;
   }
+}
+
+/* Coerce the <span> icon container away from display:inline */
+.mat-mini-fab .mat-button-wrapper {
+  display: flex !important;
+  justify-content: center;
 }

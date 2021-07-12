@@ -1,5 +1,7 @@
-<mat-selection-list [multiple]="false" (selectionChange)="on_SelectionChange($event)">
-  <mat-list-option *ngFor="let hotspot of model.hotspots" [value]="hotspot">
-    hotspot {{hotspot.id }}
-  </mat-list-option>
-</mat-selection-list>
+<mat-card *ngFor="let hotspot of model.hotspots" (click)="onSelectHotspot(hotspot)">
+  <mat-card-content>
+    <span *ngIf="hotspot.text" class="hotspot-text">{{hotspot.text}}</span>
+    <span *ngIf="!hotspot.text" class="mat-caption">(no text)</span>
+    <span class="spacer"></span>
+  </mat-card-content>
+</mat-card>

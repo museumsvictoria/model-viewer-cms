@@ -1,0 +1,16 @@
+mat-card {
+  margin-top: 5px;
+}
+
+mat-card-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+
+.hotspot-text {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

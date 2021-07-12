@@ -1,0 +1,24 @@
+.mat-app-background {
+  min-height: 100%;
+}
+.breadcrumbs {
+  margin-left: 20px;
+  padding: 10px 16px;
+  list-style: none;
+
+  li{
+    display: inline;
+    +li:before {
+      padding: 8px;
+      content: "/\00a0";
+    }
+
+    a {
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+}
