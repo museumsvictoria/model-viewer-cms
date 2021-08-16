@@ -25,7 +25,7 @@ export class NewSectionDialogComponent implements OnInit {
 
   sectionName = new FormControl("", {
     validators: [Validators.required],
-    asyncValidators: [this.validateNameViaServer.bind(this)],
+    asyncValidators: [this.validateName.bind(this)],
   });
 
   ngOnInit(): void {}
@@ -44,7 +44,7 @@ export class NewSectionDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  validateNameViaServer(
+  validateName(
     ctrl: AbstractControl
   ): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
     const r = this.data.project.sections && this.data.project.sections.some(x => x.name && x.name.trim().toLowerCase() == ctrl.value.trim().toLowerCase());

@@ -9,10 +9,11 @@ import { NewHotspotModel } from "../models/newHotspotModel";
   providedIn: "root",
 })
 export class DataService {
+
   constructor(
     private http: HttpClient,
     @Inject("BASE_URL") private baseUrl: string
-  ) {}
+  ) { }
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -43,14 +44,14 @@ export class DataService {
     );
   }
 
-   renameProject(id: string, name: string): Observable<any> {
-      if (!id) {
+  renameProject(id: string, name: string): Observable<any> {
+    if (!id) {
       return throwError("Id is empty");
     }
     if (!name) {
       return throwError("Project name is empty");
     }
-      const body = { id, name };
+    const body = { id, name };
     return this.http.post<any>(
       `${this.baseUrl}rename-project`,
       body,
@@ -68,6 +69,24 @@ export class DataService {
     const body = { projectId, sectionName };
     return this.http.post<any>(
       `${this.baseUrl}add-section`,
+      body,
+      this.httpOptions
+    );
+  }
+
+  renameSection(projectId: string, sectionId: string, name: string): Observable<any> {
+    if (!projectId) {
+      return throwError("ProjectId is null");
+    }
+    if (!sectionId) {
+      return throwError("SectionId is null");
+    }
+    if (!name) {
+      return throwError("Name is empty");
+    }
+    const body = { projectId, sectionId, name };
+    return this.http.post<any>(
+      `${this.baseUrl}rename-section`,
       body,
       this.httpOptions
     );

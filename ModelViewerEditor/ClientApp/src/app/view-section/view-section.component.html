@@ -1,8 +1,11 @@
 
 <ng-container *ngIf="section">
   <div class="control-bar">
-    <button (click)="onNewModel_click()"  mat-raised-button color="primary">
+    <button (click)="onNewModel_click()" mat-raised-button color="primary">
       Add model
+    </button>
+    <button (click)="onRenameSection_click()" mat-raised-button color="primary">
+      Rename section
     </button>
     <button (click)="onDeleteClick()" mat-flat-button>Delete section</button>
   </div>

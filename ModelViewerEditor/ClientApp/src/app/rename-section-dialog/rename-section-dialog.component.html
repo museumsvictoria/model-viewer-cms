@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Rename section</h1>
+<div mat-dialog-content>
+  <mat-form-field class="example-full-width" #nameControl>
+    <mat-label>Section name</mat-label>
+    <input matInput [formControl]="sectionName">
+    <mat-error *ngIf="sectionName.hasError('required')">
+      Please enter a section name
+    </mat-error>
+    <mat-error *ngIf="sectionName.hasError('nameExists')">
+      There is already a section with that name
+    </mat-error>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel_click()">Cancel</button>
+  <button mat-button (click)="onSubmit_click()" [disabled]="!sectionName.touched || sectionName.invalid || sectionName.value === section.name">Ok</button>
+</div>

@@ -60,7 +60,7 @@ namespace ModelViewerEditor.Controllers
         }
 
         [HttpPost("rename-project")]
-        public ActionResult RenameProject([FromBody] RenameRequestDto request)
+        public ActionResult RenameProject([FromBody] RenameProjectDto request)
         {
             if (!request.Id.IsObjectId())
                 return NotFound();
@@ -80,6 +80,50 @@ namespace ModelViewerEditor.Controllers
 
         }
 
+        
+        [HttpPost("rename-section")]
+        public ActionResult RenameSection([FromBody] RenameSectionDto request)
+        {
+            if (!request.ProjectId.IsObjectId())
+            {
+                return BadRequest("Project not found");
+            }
+
+            if (!request.SectionId.IsObjectId())
+            {
+                return BadRequest("Section not found");
+            }
+
+            if (request.Name.IsNullOrWhitespace())
+            {
+                return BadRequest("Section name is empty");
+            }
+
+            var project = _dataService.Get(new ObjectId(request.ProjectId));
+            if (project == null)
+            {
+                return BadRequest("Project not found");
+            }
+
+            var section = project.Sections.FirstOrDefault(x => x.Id.ToString() == request.SectionId);
+
+            if (section == null)
+            {
+                return BadRequest("Section not found");
+            }
+
+            if(project.Sections.Where(x => x.Id != section.Id).Any(x => x.Name.ToLower() == request.Name))
+            {
+                return BadRequest("There is already a section with this name");
+            }
+
+            section.Name = request.Name;
+            _dataService.Update(project);
+
+            return Ok(project);
+
+        }
+
         [HttpPost("add-section")]
         public ActionResult AddSection(SectionNameRequestDto requestNameRequestDto)
         {
@@ -90,7 +134,7 @@ namespace ModelViewerEditor.Controllers
 
             if (requestNameRequestDto.SectionName.IsNullOrWhitespace())
             {
-                return BadRequest("Section name missing");
+                return BadRequest("Section name is empty");
             }
 
             var project = _dataService.Get(new ObjectId(requestNameRequestDto.ProjectId));

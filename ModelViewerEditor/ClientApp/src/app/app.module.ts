@@ -37,6 +37,7 @@ import { HotspotFormComponent } from './hotspot-form/hotspot-form.component';
 import { NewHotspotDialogComponent } from './new-hotspot-dialog/new-hotspot-dialog.component';
 import { ModelViewerInfoComponent } from './model-viewer-info/model-viewer-info.component';
 import { RenameProjectDialogComponent } from './rename-project-dialog/rename-project-dialog.component';
+import { RenameSectionDialogComponent } from './rename-section-dialog/rename-section-dialog.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { RenameProjectDialogComponent } from './rename-project-dialog/rename-pro
     NewHotspotDialogComponent,
     ModelViewerInfoComponent,
     RenameProjectDialogComponent,
+    RenameSectionDialogComponent,
   ],
   imports: [
     BrowserModule,

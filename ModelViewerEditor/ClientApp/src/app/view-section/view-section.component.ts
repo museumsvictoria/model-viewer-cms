@@ -10,6 +10,7 @@ import {ConfirmDialogService} from "../shared/services/confirm-dialog.service";
 import {MatSelectionListChange} from "@angular/material/list";
 import {NewModelDialogComponent} from "../new-model-dialog/new-model-dialog.component";
 import {AppHeadingService} from "../shared/services/app-heading.service";
+import { RenameSectionDialogComponent } from "../rename-section-dialog/rename-section-dialog.component";
 
 @Component({
   selector: "app-view-section",
@@ -92,7 +93,20 @@ export class ViewSectionComponent implements OnInit {
     });
   }
 
+  onRenameSection_click() {
+    const dialogRef = this.dialog.open(RenameSectionDialogComponent, {
+      height: "400px",
+      width: "600px",
+      data: { project: this.project, section: this.section },
+    });
 
+    dialogRef.afterClosed().subscribe((result) => {
+      this.loadProjectAndSection(
+        this.projectId,
+        this.sectionId
+      );
+    });
+  }
 
   onDeleteClick() {
     this.confirmDialogService.confirmDialog(
