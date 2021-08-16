@@ -36,6 +36,7 @@ import { InfoCardComponent } from './info-card/info-card.component';
 import { HotspotFormComponent } from './hotspot-form/hotspot-form.component';
 import { NewHotspotDialogComponent } from './new-hotspot-dialog/new-hotspot-dialog.component';
 import { ModelViewerInfoComponent } from './model-viewer-info/model-viewer-info.component';
+import { RenameProjectDialogComponent } from './rename-project-dialog/rename-project-dialog.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { ModelViewerInfoComponent } from './model-viewer-info/model-viewer-info.
     HotspotFormComponent,
     NewHotspotDialogComponent,
     ModelViewerInfoComponent,
+    RenameProjectDialogComponent,
   ],
   imports: [
     BrowserModule,

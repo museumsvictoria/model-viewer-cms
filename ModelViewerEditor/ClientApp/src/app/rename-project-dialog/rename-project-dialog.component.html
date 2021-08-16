@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>New project</h1>
+<div mat-dialog-content>
+  <mat-form-field class="example-full-width" #nameControl>
+    <mat-label>Project name</mat-label>
+    <input matInput [formControl]="projectName">
+    <mat-error *ngIf="projectName.hasError('required')">
+      Please enter a project name
+    </mat-error>
+    <mat-error *ngIf="projectName.hasError('nameExists')">
+      There is already a project with that name
+    </mat-error>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel_click()">Cancel</button>
+  <button mat-button (click)="onSubmit_click()" [disabled]="!projectName.touched || projectName.invalid || projectName.value === project.name">Ok</button>
+</div>

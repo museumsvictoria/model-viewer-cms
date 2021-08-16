@@ -43,6 +43,21 @@ export class DataService {
     );
   }
 
+   renameProject(id: string, name: string): Observable<any> {
+      if (!id) {
+      return throwError("Id is empty");
+    }
+    if (!name) {
+      return throwError("Project name is empty");
+    }
+      const body = { id, name };
+    return this.http.post<any>(
+      `${this.baseUrl}rename-project`,
+      body,
+      this.httpOptions
+    );
+  }
+
   addSection(projectId: string, sectionName: string): Observable<any> {
     if (!projectId) {
       return throwError("ProjectId is null");

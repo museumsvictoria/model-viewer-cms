@@ -9,6 +9,7 @@ import { ConfirmDialogService } from "../shared/services/confirm-dialog.service"
 import { AppHeadingService } from "../shared/services/app-heading.service";
 import { MatSelectionListChange } from "@angular/material/list";
 import { NewSectionDialogComponent } from "../new-section-dialog/new-section-dialog.component";
+import { RenameProjectDialogComponent } from "../rename-project-dialog/rename-project-dialog.component";
 
 @Component({
   selector: "app-view-project",
@@ -75,6 +76,18 @@ export class ViewProjectComponent implements OnInit {
 
   onNewSection_click() {
     const dialogRef = this.dialog.open(NewSectionDialogComponent, {
+      height: "400px",
+      width: "600px",
+      data: { project: this.project },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.loadProject(this.idFromRoute);
+    });
+  }
+
+   onRenameProject_click() {
+    const dialogRef = this.dialog.open(RenameProjectDialogComponent, {
       height: "400px",
       width: "600px",
       data: { project: this.project },
