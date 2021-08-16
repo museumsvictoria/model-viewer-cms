@@ -46,9 +46,8 @@ namespace ModelViewerEditor.Controllers
             var result = _dataService.Get(new ObjectId(id));
             return result != default ? Ok(result) : NotFound();
         }
-        
-        
-       
+
+
         [HttpPost("add-project")]
         public ActionResult AddProject([FromBody]string name)
         {
@@ -59,7 +58,7 @@ namespace ModelViewerEditor.Controllers
                // return NoContent();
             return BadRequest();
         }
-        
+
         [HttpPost("add-section")]
         public ActionResult AddSection(SectionNameRequestDto requestNameRequestDto)
         {
@@ -91,8 +90,8 @@ namespace ModelViewerEditor.Controllers
             
             return NoContent();
         }
-        
-                
+
+
         [HttpPost("add-model")]
         public ActionResult AddModel(AddModelDto dto)
         {
@@ -137,7 +136,7 @@ namespace ModelViewerEditor.Controllers
             
             return NoContent();
         }
-                
+
         [HttpPost("delete-project")]
         public ActionResult DeleteProject([FromBody] string projectId)
         {
@@ -156,7 +155,7 @@ namespace ModelViewerEditor.Controllers
             
             return NoContent();
         }
-        
+
         [HttpPost("delete-section")]
         public ActionResult DeleteSection(DeleteSectionDto dto)
         {
@@ -185,7 +184,7 @@ namespace ModelViewerEditor.Controllers
             
             _dataService.Update(project);
             
-            var filePath = Path.Join(_hostingEnvironment.WebRootPath, "models", dto.ProjectId, dto.SectionId);
+            var filePath = Path.Join(_hostingEnvironment.WebRootPath, "models", dto.ProjectId);
             if (Directory.Exists(filePath))
             {
                 Directory.Delete(filePath, true);
@@ -195,36 +194,36 @@ namespace ModelViewerEditor.Controllers
         }
         
         [HttpPost("delete-model")]
-        public ActionResult DeleteModel(DeleteModelDto dto)
+        public ActionResult DeleteModel(ModelIdDto id)
         {
-            if (!dto.ProjectId.IsObjectId())
+            if (!id.ProjectId.IsObjectId())
             {
                 return BadRequest("Project not found");
             }
             
-            if (!dto.SectionId.IsObjectId())
+            if (!id.SectionId.IsObjectId())
             {
                 return BadRequest("Section not found");
             }
             
-            if (!dto.ModelId.IsObjectId())
+            if (!id.ModelId.IsObjectId())
             {
                 return BadRequest("Model not found");
             }
             
-            var project = _dataService.Get(new ObjectId(dto.ProjectId));
+            var project = _dataService.Get(new ObjectId(id.ProjectId));
             if (project == null)
             {
                 return BadRequest("Project not found");
             }   
             
-            var section= project.Sections.FirstOrDefault(x => string.Equals(x.Id.ToString(), dto.SectionId, StringComparison.CurrentCultureIgnoreCase));
+            var section= project.Sections.FirstOrDefault(x => string.Equals(x.Id.ToString(), id.SectionId, StringComparison.CurrentCultureIgnoreCase));
             if (section == null)
             {
                 return BadRequest("Section not found");
             }  
             
-            var model= section.Models.FirstOrDefault(x => string.Equals(x.Id.ToString(), dto.ModelId, StringComparison.CurrentCultureIgnoreCase));
+            var model= section.Models.FirstOrDefault(x => string.Equals(x.Id.ToString(), id.ModelId, StringComparison.CurrentCultureIgnoreCase));
 
             if (model != null)
             {
@@ -233,7 +232,7 @@ namespace ModelViewerEditor.Controllers
             
             _dataService.Update(project);
             
-            var filePath = Path.Join(_hostingEnvironment.WebRootPath, "models", dto.ProjectId, dto.SectionId, dto.ModelId + ".glb");
+            var filePath = Path.Join(_hostingEnvironment.WebRootPath, "models", id.ProjectId, id.ModelId + ".glb");
             if (System.IO.File.Exists(filePath))
             {
                 System.IO.File.Delete(filePath);
@@ -243,30 +242,216 @@ namespace ModelViewerEditor.Controllers
             
             return NoContent();
         }
-
-        /*
-        [HttpPost("upload")]
-        public  ActionResult Upload()
+        
+        [HttpPost("delete-hotspot")]
+        public ActionResult DeleteHotspot(HotspotIdDto id)
         {
-          //  long size = request.File.Sum(f => f.Length);
-          var f = Request;
-          //   var formFile = request.File;
-          // if (formFile.Length > 0)
-          // {
-          //     var filePath = Path.GetTempFileName();
-          //
-          //     using (var stream = System.IO.File.Create(filePath))
-          //     {
-          //         //  await formFile.CopyToAsync(stream);
-          //     }
-          // }
+            if (!id.ProjectId.IsObjectId())
+            {
+                return BadRequest("Project not found");
+            }
+            
+            if (!id.SectionId.IsObjectId())
+            {
+                return BadRequest("Section not found");
+            }
+            
+            if (!id.ModelId.IsObjectId())
+            {
+                return BadRequest("Model not found");
+            }
+            
+            var project = _dataService.Get(new ObjectId(id.ProjectId));
+            if (project == null)
+            {
+                return BadRequest("Project not found");
+            }   
+            
+            var section = project.Sections.FirstOrDefault(x => string.Equals(x.Id.ToString(), id.SectionId, StringComparison.CurrentCultureIgnoreCase));
+            if (section == null)
+            {
+                return BadRequest("Section not found");
+            }  
+            
+            var model= section.Models.FirstOrDefault(x => string.Equals(x.Id.ToString(), id.ModelId, StringComparison.CurrentCultureIgnoreCase));
+            if (model == null)
+            {
+                return BadRequest("Model not found");
+            } 
+            var hotspot= model.Hotspots.FirstOrDefault(x => string.Equals(x.Id.ToString(), id.HotspotId, StringComparison.CurrentCultureIgnoreCase));
+            
+            if (hotspot == null)
+            {
+                return BadRequest("Hotspot not found");
+            } 
+            
+                model.Hotspots.Remove(hotspot);
+            
+            
+            _dataService.Update(project);
+            
+    
+            
+            
+            return NoContent();
+        }
+        
+        
+        [HttpPost("update-hotspot-text")]
+        public ActionResult<HotspotModel> UpdateHotspotText(HotspotUpdateTextDto updateText)
+        {
+            if (!updateText.ProjectId.IsObjectId())
+            {
+                return BadRequest("Project not found");
+            }
+            
+            if (!updateText.SectionId.IsObjectId())
+            {
+                return BadRequest("Section not found");
+            }
+            
+            if (!updateText.ModelId.IsObjectId())
+            {
+                return BadRequest("Model not found");
+            }
+            
+            var project = _dataService.Get(new ObjectId(updateText.ProjectId));
+            if (project == null)
+            {
+                return BadRequest("Project not found");
+            }   
+            
+            var section = project.Sections.FirstOrDefault(x => string.Equals(x.Id.ToString(), updateText.SectionId, StringComparison.CurrentCultureIgnoreCase));
+            if (section == null)
+            {
+                return BadRequest("Section not found");
+            }  
+            
+            var model= section.Models.FirstOrDefault(x => string.Equals(x.Id.ToString(), updateText.ModelId, StringComparison.CurrentCultureIgnoreCase));
+            if (model == null)
+            {
+                return BadRequest("Model not found");
+            } 
+            var hotspot= model.Hotspots.FirstOrDefault(x => string.Equals(x.Id.ToString(), updateText.HotspotId, StringComparison.CurrentCultureIgnoreCase));
+            
+            if (hotspot == null)
+            {
+                return BadRequest("Hotspot not found");
+            }
 
-          // Process uploaded files
-          // Don't rely on or trust the FileName property without validation.
+            hotspot.Text = updateText.Text;
+            
+            
+            _dataService.Update(project);
 
-          //  return Ok(new { count = request.File.Length });
-          return Ok();
-        }*/
+            return hotspot;
+        }
+        
+        [HttpPost("update-hotspot-position")]
+        public ActionResult<HotspotModel> UpdateHotspotPosition(HotspotUpdatePositionDto updateText)
+        {
+            if (!updateText.ProjectId.IsObjectId())
+            {
+                return BadRequest("Project not found");
+            }
+            
+            if (!updateText.SectionId.IsObjectId())
+            {
+                return BadRequest("Section not found");
+            }
+            
+            if (!updateText.ModelId.IsObjectId())
+            {
+                return BadRequest("Model not found");
+            }
+            
+            var project = _dataService.Get(new ObjectId(updateText.ProjectId));
+            if (project == null)
+            {
+                return BadRequest("Project not found");
+            }   
+            
+            var section = project.Sections.FirstOrDefault(x => string.Equals(x.Id.ToString(), updateText.SectionId, StringComparison.CurrentCultureIgnoreCase));
+            if (section == null)
+            {
+                return BadRequest("Section not found");
+            }  
+            
+            var model= section.Models.FirstOrDefault(x => string.Equals(x.Id.ToString(), updateText.ModelId, StringComparison.CurrentCultureIgnoreCase));
+            if (model == null)
+            {
+                return BadRequest("Model not found");
+            } 
+            var hotspot= model.Hotspots.FirstOrDefault(x => string.Equals(x.Id.ToString(), updateText.HotspotId, StringComparison.CurrentCultureIgnoreCase));
+            
+            if (hotspot == null)
+            {
+                return BadRequest("Hotspot not found");
+            }
+
+            hotspot.DataPosition = updateText.Position;
+            hotspot.DataNormal = updateText.Normal;
+            
+            _dataService.Update(project);
+
+            return hotspot;
+        }
+        
+        [HttpPost("add-hotspot")]
+        public ActionResult<HotspotModel> AddHotspotModel(NewHotspotDto hotspot)
+        {
+            if (!hotspot.ProjectId.IsObjectId())
+            {
+                return BadRequest("Project not found");
+            }
+            
+            if (!hotspot.SectionId.IsObjectId())
+            {
+                return BadRequest("Section not found");
+            }
+            
+            if (!hotspot.ModelId.IsObjectId())
+            {
+                return BadRequest("Model not found");
+            }
+            
+            var project = _dataService.Get(new ObjectId(hotspot.ProjectId));
+            if (project == null)
+            {
+                return BadRequest("Project not found");
+            }   
+            
+            var section= project.Sections.FirstOrDefault(x => string.Equals(x.Id.ToString(), hotspot.SectionId, StringComparison.CurrentCultureIgnoreCase));
+            if (section == null)
+            {
+                return BadRequest("Section not found");
+            }  
+            
+            var model= section.Models.FirstOrDefault(x => string.Equals(x.Id.ToString(), hotspot.ModelId, StringComparison.CurrentCultureIgnoreCase));
+            if (model == null)
+            {
+                return BadRequest("Model not found");
+            }
+
+            var hs = new HotspotModel
+            {
+                Text = hotspot.Text,
+                CameraOrbit = hotspot.CameraOrbit,
+                DataNormal = hotspot.DataNormal,
+                DataPosition = hotspot.DataPosition,
+                FieldOfView = hotspot.FieldOfView
+            };
+            
+            model.Hotspots.Add(hs);
+            
+            
+            _dataService.Update(project);
+
+            return hs;
+
+        }
+
+      
         
         [HttpPost("upload"), DisableRequestSizeLimit]
         public  async Task<IActionResult> Upload([FromForm] string projectId, [FromForm] string sectionId, [FromForm] string modelId, [FromForm] IFormFile file)
@@ -278,7 +463,7 @@ namespace ModelViewerEditor.Controllers
                     return BadRequest("Incorrect file type (expecting .glb file)");
                 }
 
-                var projectDir = Path.Join(_hostingEnvironment.WebRootPath, "models", projectId, sectionId);
+                var projectDir = Path.Join(_hostingEnvironment.WebRootPath, "models", projectId);
                 if (!Directory.Exists(projectDir))
                     Directory.CreateDirectory(projectDir);
                 
@@ -367,7 +552,7 @@ namespace ModelViewerEditor.Controllers
         [HttpGet("glb-exists")]
         public ActionResult<bool> GlbExists(string projectId, string sectionId, string modelId)
         {
-               var filePath = Path.Join(_hostingEnvironment.WebRootPath, "models", projectId, sectionId, modelId + ".glb");
+               var filePath = Path.Join(_hostingEnvironment.WebRootPath, "models", projectId, modelId + ".glb");
 
                return System.IO.File.Exists(filePath);
 

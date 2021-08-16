@@ -2,22 +2,23 @@
   <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)"
                  (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
     <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
-      Drag a GLB here
-      <button type="button" (click)="openFileSelector()">Browse Files</button>
+      <p>Drag a GLB here</p>
+      <p>  <button type="button" mat-flat-button (click)="openFileSelector()">Browse</button></p>
+
     </ng-template>
   </ngx-file-drop>
-  <div class="upload-table">
-    <table class="table">
-      <thead>
-      <tr>
-        <th>Name</th>
-      </tr>
-      </thead>
-      <tbody class="upload-name-style">
-      <tr *ngFor="let item of files; let i=index">
-        <td><strong>{{ item.relativePath }}</strong></td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+<!--  <div class="upload-table">-->
+<!--    <table class="table">-->
+<!--      <thead>-->
+<!--      <tr>-->
+<!--        <th>Name</th>-->
+<!--      </tr>-->
+<!--      </thead>-->
+<!--      <tbody class="upload-name-style">-->
+<!--      <tr *ngFor="let item of files; let i=index">-->
+<!--        <td><strong>{{ item.relativePath }}</strong></td>-->
+<!--      </tr>-->
+<!--      </tbody>-->
+<!--    </table>-->
+<!--  </div>-->
 </div>

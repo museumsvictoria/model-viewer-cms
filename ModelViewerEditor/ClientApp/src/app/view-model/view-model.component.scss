@@ -5,21 +5,81 @@
 model-viewer {
   height: 100%;
   width: 100%;
-}
-.wrapper {
-  flex: 2;
-  padding: 5px;
+  cursor: crosshair;
 }
 
-.control-bar {
-  padding: 10px;
-}
-
-.sidebar {
-  border-right: 1px solid #999;
-}
-.sidebar-header {
+.model-wrapper {
+  align-items: stretch;
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+
+mat-drawer {
+  width: 300px;
+  .drawer-header {
+    padding: 5px 10px;
+  }
+
+  .drawer-content {
+    padding: 0 20px;
+  }
+}
+mat-drawer-container {
+  height: 100%;
+}
+
+.hotspot-button {
+  background: #fff;
+  border-radius: 32px;
+  border: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+  cursor: pointer;
+  height: 1.5em;
+  padding: 8px;
+  position: relative;
+  transition: opacity 0.3s;
+  width: 1.5em;
+
+  .annotation {
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    color: rgba(0, 0, 0, 0.8);
+    display: block;
+    left: calc(100%);
+    max-width: 128px;
+    overflow-wrap: break-word;
+    padding: 0.5em 1em;
+    position: absolute;
+    top: 50%;
+    width: max-content;
+  }
+}
+
+mat-form-field {
+  display: block;
+}
+
+.button-row {
+  margin-top: 20px;
+  text-align: center;
+}
+
+app-model-viewer-info{
+  display: block;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 300px;
+  z-index: 1000;
+  opacity: 0.5;
+  transition: all 100ms;
+
+  &:hover{
+    opacity: 1;
+  }
 }

@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>New section</h1>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Hotspot text</mat-label>
+    <textarea matInput [formControl]="text"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onSubmit_click()"  [disabled]="!text.touched || text.invalid">Ok</button>
+</div>

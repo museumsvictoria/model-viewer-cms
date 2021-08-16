@@ -1,15 +1,24 @@
-<mat-toolbar>
-  <span *ngIf="notFound">Model Editor</span>
-  <span *ngIf="!project && !notFound">Loading...</span>
-  <span *ngIf="project && !notFound">Model Editor: <a [routerLink]="['/']">Projects</a>  > {{project.name}}</span>
-</mat-toolbar>
-<div class="container">
-  <p *ngIf="notFound" class="mat-error">Not found</p>
-  <ng-container *ngIf="project">
-    <h2 class="mat-h2">{{ project.name }}</h2>
-    <button (click)="onDeleteClick()">Delete Project</button>
-    <app-list-sections [project]="project" (sectionAdded)="onSectionAdded()"></app-list-sections>
+<ng-container *ngIf="project">
+  <div class="control-bar">
+    <button (click)="onNewSection_click()" mat-raised-button color="primary">
+      Add section
+    </button>
+    <button (click)="onDeleteClick()" mat-flat-button>Delete project</button>
+  </div>
 
+  <div class="container">
+    <h4>Sections</h4>
+    <mat-selection-list
+      [multiple]="false"
+      (selectionChange)="on_SelectionChange($event)"
+    >
+      <mat-list-option
+        *ngFor="let section of project.sections"
+        [value]="section.id"
+      >
+        {{ section.name }}
+      </mat-list-option>
+    </mat-selection-list>
 
-  </ng-container>
-</div>
+  </div>
+</ng-container>

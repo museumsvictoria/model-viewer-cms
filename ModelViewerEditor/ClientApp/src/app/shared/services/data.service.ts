@@ -2,6 +2,8 @@ import { Inject, Injectable } from "@angular/core";
 import { ProjectModel } from "../models/projectModel";
 import { EMPTY, Observable, of, throwError } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HotspotModel } from "../models/hotspotModel";
+import { NewHotspotModel } from "../models/newHotspotModel";
 
 @Injectable({
   providedIn: "root",
@@ -56,6 +58,54 @@ export class DataService {
     );
   }
 
+  addModel(projectId: string, sectionId, modelName: string) {
+    if (!projectId) {
+      return throwError("projectId is null");
+    }
+    if (!sectionId) {
+      return throwError("sectionId is null");
+    }
+    if (!modelName) {
+      return throwError("Model name is empty");
+    }
+    const body = { projectId, sectionId, modelName };
+    return this.http.post<any>(
+      `${this.baseUrl}add-model`,
+      body,
+      this.httpOptions
+    );
+  }
+
+  addHotspot(model: NewHotspotModel): Observable<HotspotModel> {
+    if (!model.projectId) {
+      return throwError("projectId is null");
+    }
+    if (!model.sectionId) {
+      return throwError("sectionId is null");
+    }
+    if (!model.modelId) {
+      return throwError("modelId is empty");
+    }
+
+    return this.http.post<HotspotModel>(
+      `${this.baseUrl}add-hotspot`,
+      model,
+      this.httpOptions
+    );
+  }
+
+  deleteProject(projectId: string): Observable<any> {
+    if (!projectId) {
+      return throwError("ProjectId is null");
+    }
+
+    return this.http.post<any>(
+      `${this.baseUrl}delete-project`,
+      '"' + projectId + '"',
+      this.httpOptions
+    );
+  }
+
   deleteSection(projectId: string, sectionId: string): Observable<any> {
     if (!projectId) {
       return throwError("ProjectId is null");
@@ -93,38 +143,96 @@ export class DataService {
     );
   }
 
-  deleteProject(projectId: string): Observable<any> {
+  deleteHotspot(
+    projectId: string,
+    sectionId: string,
+    modelId: string,
+    hotspotId: string
+  ): Observable<any> {
     if (!projectId) {
       return throwError("ProjectId is null");
     }
-
+    if (!sectionId) {
+      return throwError("sectionId is empty");
+    }
+    if (!modelId) {
+      return throwError("modelId is empty");
+    }
+    if (!hotspotId) {
+      return throwError("hotspotId is empty");
+    }
+    const body = { projectId, sectionId, modelId, hotspotId };
     return this.http.post<any>(
-      `${this.baseUrl}delete-project`,
-      '"' + projectId + '"',
+      `${this.baseUrl}delete-hotspot`,
+      body,
+      this.httpOptions
+    );
+  }
+
+  updateHotspotText(
+    projectId: string,
+    sectionId: string,
+    modelId: string,
+    hotspotId: string,
+    text: string
+  ): Observable<HotspotModel> {
+    if (!projectId) {
+      return throwError("ProjectId is null");
+    }
+    if (!sectionId) {
+      return throwError("sectionId is empty");
+    }
+    if (!modelId) {
+      return throwError("modelId is empty");
+    }
+    if (!hotspotId) {
+      return throwError("hotspotId is empty");
+    }
+    const body = { projectId, sectionId, modelId, hotspotId, text };
+    return this.http.post<any>(
+      `${this.baseUrl}update-hotspot-text`,
+      body,
+      this.httpOptions
+    );
+  }
+
+  updateHotspotPosition(
+    projectId: string,
+    sectionId: string,
+    modelId: string,
+    hotspotId: string,
+    position: string,
+    normal: string
+  ): Observable<HotspotModel> {
+    if (!projectId) {
+      return throwError("ProjectId is null");
+    }
+    if (!sectionId) {
+      return throwError("sectionId is empty");
+    }
+    if (!modelId) {
+      return throwError("modelId is empty");
+    }
+    if (!hotspotId) {
+      return throwError("hotspotId is empty");
+    }
+    if (!position) {
+      return throwError("position is empty");
+    }
+    if (!normal) {
+      return throwError("normal is empty");
+    }
+    const body = { projectId, sectionId, modelId, hotspotId, position, normal };
+    console.log(body);
+    return this.http.post<any>(
+      `${this.baseUrl}update-hotspot-position`,
+      body,
       this.httpOptions
     );
   }
 
   projectExists(name: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.baseUrl}project-exists?name=${name}`);
-  }
-
-  addModel(projectId: string, sectionId, modelName: string) {
-    if (!projectId) {
-      return throwError("projectId is null");
-    }
-    if (!sectionId) {
-      return throwError("sectionId is null");
-    }
-    if (!modelName) {
-      return throwError("Model name is empty");
-    }
-    const body = { projectId, sectionId, modelName };
-    return this.http.post<any>(
-      `${this.baseUrl}add-model`,
-      body,
-      this.httpOptions
-    );
   }
 
   uploadGlb(
@@ -152,11 +260,10 @@ export class DataService {
 
   glbExists(
     projectId: string,
-    sectionId: string,
     modelId: string
   ): Observable<boolean> {
     return this.http.get<boolean>(
-      `${this.baseUrl}glb-exists?projectId=${projectId}&sectionId=${sectionId}&modelId=${modelId}`
+      `${this.baseUrl}glb-exists?projectId=${projectId}&modelId=${modelId}`
     );
   }
 }
