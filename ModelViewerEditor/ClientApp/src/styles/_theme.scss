@@ -1,0 +1,181 @@
+@use '~@angular/material' as mat;
+
+@include mat.core();
+
+// Define a light theme
+$light-primary: mat.define-palette(mat.$indigo-palette);
+$light-accent: mat.define-palette(mat.$amber-palette);
+// The "warn" palette is optional and defaults to red if not specified.
+$light-warn: mat.define-palette(mat.$red-palette);
+
+$light-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $light-primary,
+      accent: $light-accent,
+      warn: $light-warn,
+    ),
+  )
+);
+
+// Define a dark theme
+$dark-primary: mat.define-palette(mat.$amber-palette);
+$dark-accent: mat.define-palette(mat.$blue-gray-palette);
+$dark-warn: mat.define-palette(mat.$red-palette);
+$dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $dark-primary,
+      accent: $dark-accent,
+      warn: $dark-warn,
+    ),
+  )
+);
+
+@include mat.all-component-themes($light-theme);
+
+.color-primary {
+  color: map-get($light-primary, darker);
+}
+
+.color-accent {
+  color: map-get($light-accent, darker);
+}
+
+.bg-primary {
+  background-color: map-get($light-primary, default);
+  color: mat.get-color-from-palette($light-primary, default-contrast);
+}
+
+.bg-accent {
+  background-color: map-get($light-accent, default);
+  color: mat.get-color-from-palette($light-accent, default-contrast);
+}
+
+.color-warn {
+  color: map-get($light-warn, darker);
+}
+
+.hotspot-button {
+  &:not(.disabled) {
+    &:hover {
+      background-color: map-get($light-accent, lighter) !important;
+      .annotation {
+        background-color: map-get($light-accent, lighter) !important;
+      }
+    }
+
+
+  }
+
+  &.selected {
+    background-color: map-get($light-accent, default) !important;
+    .annotation {
+      background-color: map-get($light-accent, default) !important;
+    }
+  }
+
+  &.disabled {
+    pointer-events: none;
+
+
+    &:not(.selected) {
+      opacity: 0.7;
+      background-color: map-get(
+          map-get($light-theme, background),
+          background
+      ) !important;
+      .annotation {
+        background-color: map-get(
+            map-get($light-theme, background),
+            background
+        ) !important;
+      }
+    }
+
+  }
+}
+.dark-theme {
+  @include mat.all-component-colors($dark-theme);
+  .color-primary {
+    color: map-get($dark-primary, lighter);
+  }
+
+  .color-accent {
+    color: map-get($dark-accent, lighter);
+  }
+
+  .color-warn {
+    color: map-get($dark-warn, lighter);
+  }
+
+  .bg-primary {
+    background-color: map-get($dark-primary, default);
+    color: mat.get-color-from-palette($dark-primary, default-contrast);
+  }
+
+  .bg-accent {
+    background-color: map-get($dark-accent, darker);
+    color: mat.get-color-from-palette($dark-accent, default-contrast);
+  }
+
+  .hotspot-button {
+    &:not(.disabled) {
+      &:hover {
+        background-color: map-get($dark-accent, lighter) !important;
+        .annotation {
+          background-color: map-get($dark-accent, lighter) !important;
+        }
+      }
+
+
+    }
+
+    &.selected {
+      background-color: map-get($dark-accent, default) !important;
+      .annotation {
+        background-color: map-get($dark-accent, default) !important;
+      }
+    }
+
+    &.disabled {
+      pointer-events: none;
+
+
+      &:not(.selected) {
+        opacity: 0.7;
+        background-color: map-get(
+            map-get($dark-theme, background),
+            background
+        ) !important;
+        .annotation {
+          background-color: map-get(
+              map-get($dark-theme, background),
+              background
+          ) !important;
+        }
+      }
+
+    }
+  }
+}
+
+//$my-primary.
+//
+//$app-primary: mat. mat-palette($mat-deep-purple);
+//$app-accent: mat-palette($mat-amber, A200, A100, A400);
+//$theme: mat-light-theme(
+//  (
+//    color: (
+//      primary: $app-primary,
+//      accent: $app-accent,
+//    ),
+//  )
+//);
+//$color: mat-get-color-config($theme);
+//
+//$primary: map-get($color, primary);
+//$accent: map-get($color, accent);
+//
+//
+//
