@@ -43,8 +43,22 @@ namespace ModelViewerEditor.Controllers
             if (!id.IsObjectId())
                 return NotFound();
 
-            var result = _dataService.Get(new ObjectId(id));
-            return result != default ? Ok(result) : NotFound();
+            var project = _dataService.Get(new ObjectId(id));
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            ReorderProject(project);
+
+            return Ok(project);
+        }
+
+        private void ReorderProject(ProjectModel project)
+        {
+            project.Sections = project.Sections.OrderBy(x => x.Name).ToList();
+            project.Sections.ForEach(section => section.Models = section.Models.OrderBy(x => x.Name).ToList());
         }
 
 
@@ -74,6 +88,9 @@ namespace ModelViewerEditor.Controllers
                  return BadRequest("Name already in use");
 
             project.Name = request.Name;
+
+            ReorderProject(project);
+
              _dataService.Update(project);
 
             return Ok(project);
@@ -118,11 +135,18 @@ namespace ModelViewerEditor.Controllers
             }
 
             section.Name = request.Name;
+
+            ReorderProject(project);
+
             _dataService.Update(project);
 
             return Ok(project);
 
         }
+
+        
+
+       
 
         [HttpPost("add-section")]
         public ActionResult AddSection(SectionNameRequestDto requestNameRequestDto)
@@ -150,6 +174,9 @@ namespace ModelViewerEditor.Controllers
 
             var section = new SectionModel { Name = requestNameRequestDto.SectionName.Trim() };
             project.Sections.Add(section);
+
+            ReorderProject(project);
+
 
             _dataService.Update(project);
 
@@ -197,9 +224,12 @@ namespace ModelViewerEditor.Controllers
 
             section.Models.Add(model);
 
+            ReorderProject(project);
+
+
             _dataService.Update(project);
 
-            return NoContent();
+            return new OkObjectResult(model);
         }
 
         [HttpPost("delete-project")]
@@ -246,6 +276,9 @@ namespace ModelViewerEditor.Controllers
             {
                 project.Sections.Remove(section);
             }
+
+            ReorderProject(project);
+
 
             _dataService.Update(project);
 
@@ -294,6 +327,8 @@ namespace ModelViewerEditor.Controllers
             {
                 section.Models.Remove(model);
             }
+
+            ReorderProject(project);
 
             _dataService.Update(project);
 
@@ -626,6 +661,9 @@ namespace ModelViewerEditor.Controllers
         [HttpPut("update-project")]
         public ActionResult Put(ProjectModel dto)
         {
+
+            ReorderProject(dto);
+
             var result = _dataService.Update(dto);
             if (result)
                 return NoContent();
