@@ -15,7 +15,12 @@
             [disabled]="addingHotspot || editingHotspot || movingHotspot">
       Delete model
     </button>
-
+    <button (click)="onMoveModel_click()"
+            mat-button
+            [disabled]="addingHotspot || editingHotspot || movingHotspot"
+            *ngIf="project.sections.length > 1">
+      Move model
+    </button>
     <button (click)="onNewHotspot_click()"
             mat-button
             [disabled]="addingHotspot || editingHotspot || movingHotspot">

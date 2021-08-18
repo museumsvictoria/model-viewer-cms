@@ -40,6 +40,7 @@ import { ModelViewerInfoComponent } from './model-viewer-info/model-viewer-info.
 import { RenameProjectDialogComponent } from './rename-project-dialog/rename-project-dialog.component';
 import { RenameSectionDialogComponent } from './rename-section-dialog/rename-section-dialog.component';
 import { RenameModelDialogComponent } from './rename-model-dialog/rename-model-dialog.component';
+import { MoveModelDialogComponent } from './move-model-dialog/move-model-dialog.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { RenameModelDialogComponent } from './rename-model-dialog/rename-model-d
     RenameProjectDialogComponent,
     RenameSectionDialogComponent,
     RenameModelDialogComponent,
+    MoveModelDialogComponent,
   ],
   imports: [
     BrowserModule,

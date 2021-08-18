@@ -132,6 +132,27 @@ export class DataService {
     );
   }
 
+  moveModel(projectId: string,sectionId: string,modelId: string,newSectionId: string): Observable<HotspotModel> {
+    if (!projectId) {
+      return throwError("projectId is null");
+    }
+    if (!sectionId) {
+      return throwError("sectionId is null");
+    }
+    if (!modelId) {
+      return throwError("modelId is empty");
+    }
+    if (!newSectionId) {
+      return throwError("newSectionId is empty");
+    }
+    const body = { projectId, sectionId, modelId, newSectionId };
+    return this.http.post<HotspotModel>(
+      `${this.baseUrl}move-model`,
+      body,
+      this.httpOptions
+    );
+  }
+
   addHotspot(model: NewHotspotModel): Observable<HotspotModel> {
     if (!model.projectId) {
       return throwError("projectId is null");

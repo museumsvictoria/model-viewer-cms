@@ -29,6 +29,8 @@ import { AppHeadingService } from "../shared/services/app-heading.service";
 import { NewHotspotDialogComponent } from "../new-hotspot-dialog/new-hotspot-dialog.component";
 import { HotspotFormComponent } from "../hotspot-form/hotspot-form.component";
 import { RenameModelDialogComponent } from "../rename-model-dialog/rename-model-dialog.component";
+import { RenameProjectDialogComponent } from "../rename-project-dialog/rename-project-dialog.component";
+import { MoveModelDialogComponent } from "../move-model-dialog/move-model-dialog.component";
 
 @Component({
   selector: "app-view-model",
@@ -122,6 +124,21 @@ export class ViewModelComponent implements OnInit {
     });
   }
 
+  onMoveModel_click() {
+    const dialogRef = this.dialog.open(MoveModelDialogComponent,
+      {
+        height: "400px",
+        width: "600px",
+        data: { project: this.project, modelId: this.model.id },
+      });
+
+    dialogRef.afterClosed().subscribe((newSectionId: string) => {
+      if (newSectionId)
+        this._router.navigate(["project", this.project.id, newSectionId]);
+    });
+  }
+
+
   onDelete_click() {
     this.confirmDialogService.confirmDialog(
       "Delete Model",
@@ -147,6 +164,9 @@ export class ViewModelComponent implements OnInit {
       }
     );
   }
+
+
+
 
   onModelViewerClick(event: MouseEvent) {
     if (!(this.addingHotspot || this.movingHotspot)) {
