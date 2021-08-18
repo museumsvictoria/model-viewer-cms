@@ -19,6 +19,7 @@ export class HotspotFormComponent implements OnInit {
   @Output() editing = new EventEmitter<boolean>();
   @Output() updated = new EventEmitter<string>();
   @Output() deleting = new EventEmitter();
+  @Output() deselect = new EventEmitter();
   @Output() moving = new EventEmitter<boolean>();
   // public properties
   inEditMode: boolean;
@@ -39,6 +40,12 @@ export class HotspotFormComponent implements OnInit {
   ngOnInit(): void {}
 
   // public methods
+
+  onDeselect() {
+    this.deselect.emit();
+    this.inMovingMode = false;
+    this.inEditMode = false;
+  }
 
   onEdit() {
     this.editHotspotText.setValue(this.text);

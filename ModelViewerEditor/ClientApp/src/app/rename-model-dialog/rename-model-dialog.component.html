@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Rename model</h1>
+<div mat-dialog-content>
+  <mat-form-field class="example-full-width" #nameControl>
+    <mat-label>Model name</mat-label>
+    <input matInput [formControl]="modelName">
+    <mat-error *ngIf="modelName.hasError('required')">
+      Please enter a model name
+    </mat-error>
+    <mat-error *ngIf="modelName.hasError('nameExists')">
+      There is already a model with that name
+    </mat-error>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel_click()">Cancel</button>
+  <button mat-button (click)="onSubmit_click()" [disabled]="!modelName.touched || modelName.invalid || modelName.value === model.name">Ok</button>
+</div>

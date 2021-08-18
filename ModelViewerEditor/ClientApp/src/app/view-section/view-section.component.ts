@@ -86,10 +86,11 @@ export class ViewSectionComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.loadProjectAndSection(
-        this.projectId,
-        this.sectionId
-      );
+      //this.loadProjectAndSection(
+      //  this.projectId,
+      //  this.sectionId
+      //);
+      this._router.navigate(["project", this.project.id, this.section.id, result.id]);
     });
   }
 

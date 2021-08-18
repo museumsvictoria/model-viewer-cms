@@ -1,20 +1,29 @@
 <div class="mat-app-background">
   <mat-toolbar>
-    <span>Model Editor:</span>
+
+
+    <span class="title">Model Editor</span>
     <ul class="breadcrumbs">
-    <li *ngFor="let breadcrumb of breadcrumbs">
-      <a class="breadcrumb"
-        *ngIf="breadcrumb.routerLink.length"
-        [routerLink]="breadcrumb.routerLink">{{ breadcrumb.text }}</a>
-      <span class="breadcrumb" *ngIf="!breadcrumb.routerLink.length">{{ breadcrumb.text }}</span>
-    </li>
-      </ul>
+      <li *ngFor="let breadcrumb of breadcrumbs">
+        <a class="breadcrumb"
+           *ngIf="breadcrumb.routerLink.length"
+           [routerLink]="breadcrumb.routerLink">{{ breadcrumb.text }}</a>
+        <span class="breadcrumb" *ngIf="!breadcrumb.routerLink.length">{{ breadcrumb.text }}</span>
+      </li>
+    </ul>
     <span class="spacer"></span>
     <mat-icon class="mr-8">brightness_5</mat-icon>
     <mat-slide-toggle [formControl]="toggleControl" class="mr-8">
     </mat-slide-toggle>
     <mat-icon>bedtime</mat-icon>
+
+
   </mat-toolbar>
+  <div class="breadcrumb-wrapper">
+   
+    <mat-divider></mat-divider>
+  </div>
+
   <router-outlet></router-outlet>
 </div>
 

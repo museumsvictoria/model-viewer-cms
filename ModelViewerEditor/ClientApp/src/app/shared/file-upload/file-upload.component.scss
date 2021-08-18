@@ -3,3 +3,13 @@ ngx-file-drop{
   margin: 50px auto;
   width: 600px;
 }
+.uploading-message {
+  display: block;
+  margin: 50px auto;
+  width: 600px;
+  text-align: center;
+}
+
+mat-spinner {
+  margin: 0 auto;
+}

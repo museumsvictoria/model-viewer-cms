@@ -1,52 +1,77 @@
-    <h4>View hotspot</h4>
-    <p *ngIf="text">{{text}}</p>
+<ng-container *ngIf="!inEditMode && !inMovingMode">
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <h4>Hotspot details</h4>
+    <span class="spacer"></span>
+    <span>
+      <button mat-icon-button color="primary" (click)="onDeselect()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </span>
+
+  </div>
+
+
+  <p *ngIf="text">{{text}}</p>
   <p *ngIf="!text"><span class="mat-caption">(no text)</span></p>
-  <p ><span class="mat-caption">Position:</span><br><span class="mat-small">{{position}}</span></p>
-  <p ><span class="mat-caption">Normal:</span><br><span class="mat-small">{{normal}}</span></p>
+
+
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+       Hotspot position
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <p><span class="mat-caption">Position:</span><br><span class="mat-small">{{position}}</span></p>
+    <p><span class="mat-caption">Normal:</span><br><span class="mat-small">{{normal}}</span></p>
+  </mat-expansion-panel>
+
+
+
 
   <mat-divider></mat-divider>
-  <div class="button-row" fxLayout="row" fxLayoutAlign="center" fxLayoutGap="10px">
-    <button mat-mini-fab color="warn" (click)="onDelete()">
-      <mat-icon>delete</mat-icon>
+  <div class="button-row" fxLayout="row" fxLayoutAlign="start center">
+    <button mat-button color="warn" (click)="onDelete()">
+      Delete
     </button>
-    <button mat-mini-fab color="" (click)="onMove()">
-      <mat-icon>control_point</mat-icon>
+    <button mat-button (click)="onMove()">
+      Move
     </button>
-    <button mat-mini-fab color="primary" (click)="onEdit()">
-      <mat-icon>edit</mat-icon>
+    <button mat-button (click)="onEdit()">
+      Edit
+    </button>
+    <button mat-button (click)="onDeselect()">
+      Deselect
     </button>
   </div>
+</ng-container>
 <ng-container *ngIf="inEditMode">
   <h4>Edit hotspot</h4>
-
   <mat-form-field appearance="outline">
     <mat-label>Hotspot text</mat-label>
     <textarea [formControl]="editHotspotText" matInput></textarea>
   </mat-form-field>
   <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="10px">
-    <button mat-mini-fab color="" (click)="onCancel()">
-      <mat-icon>close</mat-icon>
+    <button mat-button (click)="onCancel()">
+      Cancel
     </button>
-    <button mat-mini-fab color="primary" (click)="onSave()">
-      <mat-icon>done</mat-icon>
+    <button mat-button (click)="onSave()">
+      Save
     </button>
   </div>
 </ng-container>
 
 
 
-  <ng-container *ngIf="inMovingMode">
-    <h4>Move hotspot</h4>
+<ng-container *ngIf="inMovingMode">
+  <h4>Move hotspot</h4>
 
-    <app-info-card
-      text="Click on the model to select a new hotspot location"
-    ></app-info-card>
-    <div class="button-row" fxLayout="row" fxLayoutAlign="center" fxLayoutGap="10px">
-      <button mat-mini-fab (click)="onCancel()">
-        <mat-icon>close</mat-icon>
-      </button>
-    </div>
-
+  <app-info-card text="Click on the model to select a new hotspot location"></app-info-card>
+  <div class="button-row" fxLayout="row" fxLayoutAlign="center" fxLayoutGap="10px">
+    <button mat-button (click)="onCancel()">
+      Cancel
+    </button>
+  </div>
+</ng-container>
 
 
 

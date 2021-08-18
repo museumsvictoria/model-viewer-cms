@@ -1,5 +1,5 @@
 .main {
-  height: 100vh;
+  height: calc(100vh - 128px);
 }
 
 model-viewer {
@@ -19,8 +19,9 @@ model-viewer {
 
 mat-drawer {
   width: 300px;
+  padding: 10px;
   .drawer-header {
-    padding: 5px 10px;
+  //  padding: 5px 10px;
   }
 
   .drawer-content {
@@ -69,17 +70,7 @@ mat-form-field {
   text-align: center;
 }
 
-app-model-viewer-info{
-  display: block;
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  width: 300px;
-  z-index: 1000;
-  opacity: 0.5;
-  transition: all 100ms;
-
-  &:hover{
-    opacity: 1;
-  }
+.hotspot-list-title{
+    margin-bottom: 0;
 }
+

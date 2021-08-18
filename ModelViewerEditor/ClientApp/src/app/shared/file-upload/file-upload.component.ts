@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Output, EventEmitter} from "@angular/core";
+import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
 import {
   FileSystemDirectoryEntry,
   FileSystemFileEntry,
@@ -12,16 +12,17 @@ import { DataService } from "../services/data.service";
   styleUrls: ["./file-upload.component.scss"],
 })
 export class FileUploadComponent implements OnInit {
-  constructor(private _dataService: DataService) {}
+  constructor(private _dataService: DataService) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   @Input() projectId: string;
   @Input() sectionId: string;
   @Input() modelId: string;
 
-  @Output() upload = new EventEmitter<any>();
+  @Output() uploaded = new EventEmitter<any>();
 
+  uploading = false;
   public files: NgxFileDropEntry[] = [];
 
   public dropped(files: NgxFileDropEntry[]) {
@@ -32,10 +33,15 @@ export class FileUploadComponent implements OnInit {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
         fileEntry.file((file: File) => {
           // Here you can access the real file
+          this.uploading = true;
 
           this._dataService
             .uploadGlb(file, this.projectId, this.sectionId, this.modelId)
-            .subscribe((x) => this.upload.emit());
+            .subscribe((x) => {
+              this.uploading = false;
+              this.uploaded.emit();
+
+            });
         });
       } else {
       }

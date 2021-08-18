@@ -15,6 +15,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatCardModule } from "@angular/material/card";
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { ViewProjectComponent } from "./view-project/view-project.component";
 import { MatDialogModule } from "@angular/material/dialog";
@@ -38,6 +39,7 @@ import { NewHotspotDialogComponent } from './new-hotspot-dialog/new-hotspot-dial
 import { ModelViewerInfoComponent } from './model-viewer-info/model-viewer-info.component';
 import { RenameProjectDialogComponent } from './rename-project-dialog/rename-project-dialog.component';
 import { RenameSectionDialogComponent } from './rename-section-dialog/rename-section-dialog.component';
+import { RenameModelDialogComponent } from './rename-model-dialog/rename-model-dialog.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +62,7 @@ import { RenameSectionDialogComponent } from './rename-section-dialog/rename-sec
     ModelViewerInfoComponent,
     RenameProjectDialogComponent,
     RenameSectionDialogComponent,
+    RenameModelDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -83,6 +86,7 @@ import { RenameSectionDialogComponent } from './rename-section-dialog/rename-sec
     MatMenuModule,
     MatSidenavModule,
     MatSlideToggleModule,
+    MatProgressSpinnerModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

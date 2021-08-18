@@ -4,6 +4,7 @@ import { EMPTY, Observable, of, throwError } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { HotspotModel } from "../models/hotspotModel";
 import { NewHotspotModel } from "../models/newHotspotModel";
+import { ObjectModel } from "../models/objectModel";
 
 @Injectable({
   providedIn: "root",
@@ -92,7 +93,28 @@ export class DataService {
     );
   }
 
-  addModel(projectId: string, sectionId, modelName: string) {
+  renameModel(projectId: string, sectionId: string, modelId: string, name: string): Observable<any> {
+    if (!projectId) {
+      return throwError("ProjectId is null");
+    }
+    if (!sectionId) {
+      return throwError("SectionId is null");
+    }
+    if (!modelId) {
+      return throwError("ModelId is null");
+    }
+    if (!name) {
+      return throwError("Name is empty");
+    }
+    const body = { projectId, sectionId, modelId, name };
+    return this.http.post<any>(
+      `${this.baseUrl}rename-model`,
+      body,
+      this.httpOptions
+    );
+  }
+
+  addModel(projectId: string, sectionId, modelName: string): Observable<ObjectModel> {
     if (!projectId) {
       return throwError("projectId is null");
     }
@@ -103,7 +125,7 @@ export class DataService {
       return throwError("Model name is empty");
     }
     const body = { projectId, sectionId, modelName };
-    return this.http.post<any>(
+    return this.http.post<ObjectModel>(
       `${this.baseUrl}add-model`,
       body,
       this.httpOptions

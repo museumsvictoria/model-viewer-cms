@@ -10,8 +10,16 @@
       <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+      .load-message {
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+      }
+    </style>
   </head>
   <body>
-    <app-root>Loading...</app-root>
+    <app-root><div class="load-message">Loading...</div></app-root>
   </body>
 </html>

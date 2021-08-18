@@ -1,136 +1,102 @@
-<div *ngIf="!glbVerified">
-  <h3>Loading...</h3>
+
+<div class="screen-load-spinner" *ngIf="!glbVerified">
+  <mat-spinner></mat-spinner>
 </div>
 <ng-container *ngIf="glbVerified && model">
   <div class="control-bar" *ngIf="glbExists">
-    <button
-      (click)="onListHotspots_click()"
-      mat-raised-button
-      color="primary"
-      [disabled]="addingHotspot || editingHotspot || movingHotspot">
-      Hotspot list
+
+    <button (click)="onRenameModel_click()"
+            mat-button
+            [disabled]="addingHotspot || editingHotspot || movingHotspot">
+      Rename model
     </button>
-    <button
-      (click)="onNewHotspot_click()"
-      mat-raised-button
-      color="primary"
-      [disabled]="addingHotspot || editingHotspot || movingHotspot">
-      Add hotspot
-    </button>
-    <button
-      (click)="onDelete_click()"
-      mat-flat-button
-      [disabled]="addingHotspot || editingHotspot || movingHotspot">
+    <button (click)="onDelete_click()"
+            mat-button
+            [disabled]="addingHotspot || editingHotspot || movingHotspot">
       Delete model
+    </button>
+
+    <button (click)="onNewHotspot_click()"
+            mat-button
+            [disabled]="addingHotspot || editingHotspot || movingHotspot">
+      Add hotspot
     </button>
   </div>
 
-  <!--  <mat-toolbar class="breadcrumb">-->
-  <!--    <span *ngIf="notFound">Model Editor</span>-->
-  <!--    <span *ngIf="!model && !notFound">Loading...</span>-->
-
-  <!--    <ng-container *ngIf="model">-->
-  <!--      <span>Model Editor: <a [routerLink]="['/']">Projects</a></span>-->
-  <!--      <span *ngIf="project"-->
-  <!--      ><a [routerLink]="['/', 'project', project.id]">{{ project.name }}</a>-->
-  <!--        </span>-->
-  <!--      <span *ngIf="section"-->
-  <!--      ><a [routerLink]="['/', 'project', project.id, section.id]">{{-->
-  <!--        section.name-->
-  <!--        }}</a>-->
-  <!--        </span>-->
-  <!--      <span>{{ model ? model.name : " (not found)" }} </span>-->
-  <!--    </ng-container>-->
-  <!--  </mat-toolbar>-->
-
   <div class="main" fxLayout="column">
-    <app-file-upload
-      [projectId]="project.id"
-      [sectionId]="section.id"
-      [modelId]="model.id"
-      *ngIf="!glbExists && project && section && model"
-      (upload)="onFileUpload()"
-    ></app-file-upload>
+    <app-file-upload [projectId]="project.id"
+                     [sectionId]="section.id"
+                     [modelId]="model.id"
+                     *ngIf="!glbExists"
+                     (uploaded)="onFileUploaded()"></app-file-upload>
 
     <mat-drawer-container *ngIf="glbExists" [hasBackdrop]="false">
-      <mat-drawer disableClose #drawer>
-        <div class="drawer-header" fxLayout="row" fxLayoutAlign=" center">
-<!--          <h3 *ngIf="addingHotspot">New hotspot</h3>-->
-<!--          <h3 *ngIf="selectedHotspot">Edit hotspot</h3>-->
-          <button mat-icon-button color="primary" (click)="viewList()" *ngIf="selectedHotspot && !editingHotspot && !movingHotspot">
-            <mat-icon>list</mat-icon>
-          </button>
-          <span class="spacer"></span>
-          <button mat-icon-button color="primary" (click)="closeDrawer()" [disabled]="addingHotspot || editingHotspot || movingHotspot">
-            <mat-icon>close</mat-icon>
-          </button>
+      <mat-drawer mode="side" opened #drawer>
+        <div *ngIf="!selectedHotspot && !addingHotspot">
+          <h4>Model orientation</h4>
+          <app-model-viewer-info [viewer]="modelViewer"> </app-model-viewer-info>
         </div>
-        <div class="drawer-content">
 
-          <app-list-hotspots *ngIf="!addingHotspot && !selectedHotspot" [model]="model" (selectHotspot)="onListSelectHotspot($event)" (goToHotspot)="onListGotoHotspot($event)"></app-list-hotspots>
-
-          <ng-container *ngIf="addingHotspot">
-            <app-info-card
-              text="Click on the model to select a location for the hotspot"
-            ></app-info-card>
-            <div class="button-row">
-              <button mat-mini-fab (click)="closeDrawer()">
-                <mat-icon>close</mat-icon>
-              </button>
-            </div>
-
-          </ng-container>
-
-          <app-hotspot-form
-            *ngIf="selectedHotspot"
-            (editing)="onHotspotEdit($event)"
-            (updated)="updateHotspotText($event)"
-            (deleting)="onHotspotDelete()"
-            (moving)="onHotspotMove($event)"
-            [hotspot]="selectedHotspot"
-            #hotspotForm
-          ></app-hotspot-form>
-
+        <div *ngIf="model.hotspots.length && !addingHotspot && !selectedHotspot">
+          <h4 class="hotspot-list-title">Hotspots</h4>
+          <app-list-hotspots [model]="model" (selectHotspot)="onListSelectHotspot($event)" (goToHotspot)="onListGotoHotspot($event)"></app-list-hotspots>
         </div>
+
+
+        <div *ngIf="addingHotspot">
+          <h4>New hotspot</h4>
+          <app-info-card text="Click on the model to select a location for the hotspot"></app-info-card>
+          <div class="button-row">
+            <button mat-flat-button color="accent" (click)="onCancelAddHotspot_click()">
+              Cancel
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="selectedHotspot">
+          <app-hotspot-form *ngIf="selectedHotspot"
+                            (editing)="onHotspotEdit($event)"
+                            (updated)="updateHotspotText($event)"
+                            (deleting)="onHotspotDelete()"
+                            (moving)="onHotspotMove($event)"
+                            (deselect)="onHotspotDeselect()"
+                            [hotspot]="selectedHotspot"
+                            #hotspotForm></app-hotspot-form>
+        </div>
+
+
       </mat-drawer>
       <mat-drawer-content>
-        <app-model-viewer-info [viewer]="modelViewer">
 
-
-        </app-model-viewer-info>
         <div class="model-wrapper">
-          <model-viewer
-            [src]="modelSource"
-            (click)="onModelViewerClick($event)"
-            loading="eager"
-            field-of-view="auto"
-            interpolation-decay="100"
-            loading="eager"
-            min-field-of-view="auto"
-            max-field-of-view="auto"
-            camera-controls
-            touch-action="none"
-            interaction-prompt="none"
-            #modelViewer
-          >
+          <model-viewer [src]="modelSource"
+                        (click)="onModelViewerClick($event)"
+                        loading="eager"
+                        field-of-view="auto"
+                        interpolation-decay="100"
+                        min-field-of-view="auto"
+                        max-field-of-view="auto"
+                        camera-controls
+                        touch-action="none"
+                        interaction-prompt="none"
+                        #modelViewer>
             <ng-container *ngFor="let hotspot of model.hotspots; let i = index">
-              <button  *ngIf="hotspot.id !== movingHotspotId"
-                       [attr.slot]="'hotspot-' + hotspot.id"
-                       [attr.data-position]="hotspot.dataPosition"
-                       [attr.data-normal]="hotspot.dataNormal"
-                       class="hotspot-button"
-                       [class.disabled]="addingHotspot || editingHotspot || movingHotspot"
-                       [class.selected]="selectedHotspot === hotspot"
-                       (click)="onHotspotSelect(hotspot)"
-              >
+              <button *ngIf="hotspot.id !== movingHotspotId"
+                      [attr.slot]="'hotspot-' + hotspot.id"
+                      [attr.data-position]="hotspot.dataPosition"
+                      [attr.data-normal]="hotspot.dataNormal"
+                      class="hotspot-button"
+                      [class.disabled]="addingHotspot || editingHotspot || movingHotspot"
+                      [class.selected]="selectedHotspot === hotspot"
+                      (click)="onHotspotSelect(hotspot)">
                 <span *ngIf="hotspot.text" class="annotation">{{ hotspot.text }}</span>
               </button>
 
             </ng-container>
 
           </model-viewer>
-        </div></mat-drawer-content
-      >
+        </div>
+      </mat-drawer-content>
     </mat-drawer-container>
 
   </div>

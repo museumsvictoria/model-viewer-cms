@@ -33,8 +33,8 @@ body {
 }
 
 .control-bar {
-  padding: 10px;
-  border-bottom: 1px solid #999;
+  padding: 10px 20px;
+  //border-bottom: 1px solid #999;
 
   button{
     margin-right: 20px;
@@ -45,4 +45,15 @@ body {
 .mat-mini-fab .mat-button-wrapper {
   display: flex !important;
   justify-content: center;
+}
+
+
+.screen-load-spinner {
+  mat-spinner {
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    z-index: 1000;
+  }
 }

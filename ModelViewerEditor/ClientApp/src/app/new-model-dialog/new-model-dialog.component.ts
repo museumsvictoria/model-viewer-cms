@@ -35,8 +35,8 @@ export class NewModelDialogComponent implements OnInit {
     this.dataService
       .addModel(this.data.projectId, this.data.section.id, this.modelName.value)
       .subscribe(
-        () => {
-          this.dialogRef.close();
+        (model) => {
+          this.dialogRef.close(model);
         },
         (err) => console.log(err)
       );

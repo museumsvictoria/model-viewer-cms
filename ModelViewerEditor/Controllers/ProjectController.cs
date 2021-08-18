@@ -144,7 +144,64 @@ namespace ModelViewerEditor.Controllers
 
         }
 
-        
+        [HttpPost("rename-model")]
+        public ActionResult RenameModel([FromBody] RenameModelDto request)
+        {
+            if (!request.ProjectId.IsObjectId())
+            {
+                return BadRequest("ProjectId not valid");
+            }
+
+            if (!request.SectionId.IsObjectId())
+            {
+                return BadRequest("SectionId not valid");
+            }
+
+            if (!request.ModelId.IsObjectId())
+            {
+                return BadRequest("ModelId not valid");
+            }
+
+            if (request.Name.IsNullOrWhitespace())
+            {
+                return BadRequest("Model name is empty");
+            }
+
+            var project = _dataService.Get(new ObjectId(request.ProjectId));
+            if (project == null)
+            {
+                return BadRequest("Project not found");
+            }
+
+            var section = project.Sections.FirstOrDefault(x => x.Id.ToString() == request.SectionId);
+
+            if (section == null)
+            {
+                return BadRequest("Section not found");
+            }
+
+            var model = section.Models.FirstOrDefault(x => x.Id.ToString() == request.ModelId);
+
+            if (model == null)
+            {
+                return BadRequest("Model not found");
+            }
+
+            if(section.Models.Where(x => x.Id != model.Id).Any(x => x.Name.ToLower() == request.Name))
+            {
+                return BadRequest("There is already a model with this name");
+            }
+
+            model.Name = request.Name;
+
+            ReorderProject(project);
+
+            _dataService.Update(project);
+
+            return Ok(project);
+
+        }
+
 
        
 

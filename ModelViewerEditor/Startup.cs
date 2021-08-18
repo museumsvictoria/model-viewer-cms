@@ -56,10 +56,10 @@ namespace ModelViewerEditor
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            //  app.UseStaticFiles();
 
             var provider = new FileExtensionContentTypeProvider();
-            provider.Mappings[".glb"] = "model/model/gltf-binary";
+            provider.Mappings[".glb"] = "model/gltf-binary";
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(

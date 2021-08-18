@@ -14,21 +14,16 @@ import { SectionModel } from "../shared/models/sectionModel";
   styleUrls: ["./list-hotspots.component.scss"],
 })
 export class ListHotspotsComponent implements OnInit {
-  constructor(private _router: Router, private dialog: MatDialog) {}
+  constructor(private _router: Router, private dialog: MatDialog) { }
 
   @Input() model: ObjectModel;
 
   @Output() selectHotspot = new EventEmitter<HotspotModel>();
 
-  @Output() goToHotspot = new EventEmitter<HotspotModel>();
+  ngOnInit(): void { }
 
-  ngOnInit(): void {}
+  onSelectionChange(event: MatSelectionListChange) {
+    this.selectHotspot.emit(event.option.value);
 
-  onGoToHotspot(hotspot: HotspotModel) {
-    this.goToHotspot.emit(hotspot);
-  }
-
-  onSelectHotspot(hotspot: HotspotModel) {
-    this.selectHotspot.emit(hotspot);
   }
 }
