@@ -18,9 +18,10 @@
     <button (click)="onMoveModel_click()"
             mat-button
             [disabled]="addingHotspot || editingHotspot || movingHotspot"
-            *ngIf="project.sections.length > 1">
-      Move model
+            *ngIf="project.sections.length > 1" title="Relocate this model to a different section">
+      Relocate model
     </button>
+    <a mat-button [href]="modelSource" [download]="modelFileName()">Download model</a>
     <button (click)="onNewHotspot_click()"
             mat-button
             [disabled]="addingHotspot || editingHotspot || movingHotspot">
@@ -38,7 +39,14 @@
     <mat-drawer-container *ngIf="glbExists" [hasBackdrop]="false">
       <mat-drawer mode="side" opened #drawer>
         <div *ngIf="!selectedHotspot && !addingHotspot">
-          <h4>Model orientation</h4>
+          <h4>File details</h4>
+          <span class="mat-caption">File name: </span>
+            <span>
+              {{model.originalFileName ? model.originalFileName : '(unspecified)'}}
+            </span>         
+        </div>
+        <div *ngIf="!selectedHotspot && !addingHotspot">
+          <h4>Orientation</h4>
           <app-model-viewer-info [viewer]="modelViewer"> </app-model-viewer-info>
         </div>
 
@@ -76,6 +84,7 @@
         <div class="model-wrapper">
           <model-viewer [src]="modelSource"
                         (click)="onModelViewerClick($event)"
+                        (load)="onModelViewerLoad()"
                         loading="eager"
                         field-of-view="auto"
                         interpolation-decay="100"

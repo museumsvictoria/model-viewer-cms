@@ -312,13 +312,26 @@ export class DataService {
     return this.http.get<boolean>(`${this.baseUrl}project-exists?name=${name}`);
   }
 
+  uploadThumb(blob: any,
+    projectId: string,
+    sectionId: string,
+    modelId: string) {
+    let formData = new FormData();
+    formData.append('file', blob, modelId + '.png');
+ 
+   formData.append("projectId", projectId);
+    formData.append("sectionId", sectionId);
+    formData.append("modelId", modelId);
+    console.log("upload-thumb");
+    return this.http.post(`${this.baseUrl}upload-thumb`, formData);
+  }
+
   uploadGlb(
     file: File,
     projectId: string,
     sectionId: string,
     modelId: string
   ): Observable<any> {
-    console.log("uploadGlb");
 
     const formData = new FormData();
     formData.append("file", file);
@@ -326,14 +339,9 @@ export class DataService {
     formData.append("sectionId", sectionId);
     formData.append("modelId", modelId);
 
-    let options = {
-      headers: new HttpHeaders({
-        "Content-Type": "false",
-      }),
-    };
-    // 'Content-Type': multipart/form-data
-    return this.http.post(`${this.baseUrl}upload`, formData);
+    return this.http.post(`${this.baseUrl}upload-model`, formData);
   }
+
 
   glbExists(
     projectId: string,
@@ -341,6 +349,23 @@ export class DataService {
   ): Observable<boolean> {
     return this.http.get<boolean>(
       `${this.baseUrl}glb-exists?projectId=${projectId}&modelId=${modelId}`
+    );
+  }
+
+    listPngs(
+    projectId: string
+  ): Observable<string[]> {
+    return this.http.get<string[]>(
+      `${this.baseUrl}list-pngs?projectId=${projectId}`
+    );
+  }
+
+   modelHasThumbnail(
+    projectId: string,
+    modelId: string
+  ): Observable<boolean> {
+    return this.http.get<boolean>(
+      `${this.baseUrl}model-has-thumbnail?projectId=${projectId}&modelId=${modelId}`
     );
   }
 }

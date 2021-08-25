@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import { DataService } from "../shared/services/data.service";
 import { first } from "rxjs/operators";
@@ -11,6 +11,7 @@ import {MatSelectionListChange} from "@angular/material/list";
 import {NewModelDialogComponent} from "../new-model-dialog/new-model-dialog.component";
 import {AppHeadingService} from "../shared/services/app-heading.service";
 import { RenameSectionDialogComponent } from "../rename-section-dialog/rename-section-dialog.component";
+import { ObjectModel } from "../shared/models/objectModel";
 
 @Component({
   selector: "app-view-section",
@@ -25,6 +26,7 @@ export class ViewSectionComponent implements OnInit {
     private confirmDialogService: ConfirmDialogService,
     private dialog: MatDialog,
     private appHeadingService: AppHeadingService,
+     @Inject("BASE_URL") private baseUrl: string
   ) {}
 
   projectId = "";
@@ -32,6 +34,7 @@ export class ViewSectionComponent implements OnInit {
   notFound = false;
   project: ProjectModel;
   section: SectionModel;
+    pngs: string[];
 
   ngOnInit() {
     const routeParams = this.route.snapshot.paramMap;
@@ -61,6 +64,9 @@ export class ViewSectionComponent implements OnInit {
             this.notFound = true;
           }
           else{
+
+            this.getPngs();
+
             this.appHeadingService.setBreadcrumbs([
               { routerLink: ["/"], text: "Projects" },
               { routerLink: ['/', 'project', project.id], text: project.name },
@@ -72,10 +78,27 @@ export class ViewSectionComponent implements OnInit {
       );
   }
 
+  private getPngs() {
+    this.dataService.listPngs( this.project.id).subscribe(pngs => this.pngs = pngs);
+  }
+
+   pngExists(modelId: string): boolean {
+    return this.pngs && this.pngs.indexOf(modelId) > -1;
+  }
+
+    pngSource(modelId: string): string {
+    return `${this.baseUrl}models/${this.projectId}/${modelId}.png`;
+  }
+
   on_SelectionChange($event: MatSelectionListChange) {
     console.log($event.options[0].value);
     let id = $event.options[0].value;
     this._router.navigate(["project", this.project.id, this.section.id, id]);
+  }
+
+  select(id: string) {
+        this._router.navigate(["project", this.project.id, this.section.id, id]);
+
   }
 
   onNewModel_click() {

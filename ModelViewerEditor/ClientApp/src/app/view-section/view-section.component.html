@@ -14,22 +14,41 @@
 
 
   <div class="container">
-    <mat-card>
-      <mat-card-subtitle>
-        Models
-      </mat-card-subtitle>
-      <mat-card-content>
-        <mat-selection-list [multiple]="false" (selectionChange)="on_SelectionChange($event)">
-          <mat-list-option *ngFor="let model of section.models" [value]="model.id">
+
+    <!--<div class="model" *ngFor="let model of section.models">
+      <img *ngIf="pngExists(model.id)" [src]="pngSource(model.id)" />
+      <div class="mat-caption">{{model.name}}</div>
+    </div>-->
+
+    <div *ngFor="let model of section.models" >
+      <mat-card class="model"(click)="select(model.id)">
+        <mat-card-content>
+          <p class="mat-caption">
             {{model.name}}
-          </mat-list-option>
-        </mat-selection-list>
-
-
-      </mat-card-content>
-
-    </mat-card>
+          </p>
+          <img *ngIf="pngExists(model.id)" [src]="pngSource(model.id)">
+          <p class="icon-wrapper" *ngIf="!pngExists(model.id)"> <mat-icon>token</mat-icon></p>
+         
+        </mat-card-content>
+      </mat-card>
+    </div>
    
-  </div>
 
+    <!--<mat-card>
+    <mat-card-subtitle>
+      Models
+    </mat-card-subtitle>
+    <mat-card-content>
+      <mat-selection-list [multiple]="false" (selectionChange)="on_SelectionChange($event)">
+        <mat-list-option *ngFor="let model of section.models" [value]="model.id">
+          {{model.name}}
+        </mat-list-option>
+      </mat-selection-list>
+
+
+    </mat-card-content>
+
+  </mat-card>-->
+
+  </div>
 </ng-container>

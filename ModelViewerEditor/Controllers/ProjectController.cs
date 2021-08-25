@@ -275,11 +275,29 @@ namespace ModelViewerEditor.Controllers
         }
 
         [HttpGet("glb-exists")]
-        public ActionResult<bool> GlbExists(string projectId, string sectionId, string modelId)
+        public ActionResult<bool> GlbExists(string projectId, string modelId)
         {
             var filePath = Path.Join(_hostingEnvironment.WebRootPath, "models", projectId, modelId + ".glb");
 
             return System.IO.File.Exists(filePath);
+        }
+
+        [HttpGet("model-has-thumbnail")]
+        public ActionResult<bool> ModelHasThumbnail(string projectId, string modelId)
+        {
+            var filePath = Path.Join(_hostingEnvironment.WebRootPath, "models", projectId, modelId + ".png");
+
+            return System.IO.File.Exists(filePath);
+        }
+
+        [HttpGet("list-pngs")]
+        public ActionResult<string[]> ListPngs(string projectId)
+        {
+            var filePath = Path.Join(_hostingEnvironment.WebRootPath, "models", projectId);
+            var aa = Directory.EnumerateFiles(filePath).ToArray();
+            var bb = aa.Where(x => Path.GetExtension(x) == ".png").ToArray();
+            var cc = bb.Select(x => Path.GetFileNameWithoutExtension(x)).ToArray();
+            return cc;
         }
 
         [HttpGet("model-exists")]
@@ -517,9 +535,9 @@ namespace ModelViewerEditor.Controllers
             return hotspot;
         }
 
-        [HttpPost("upload")]
-        [DisableRequestSizeLimit]
-        public async Task<IActionResult> Upload([FromForm] string projectId, [FromForm] string sectionId,
+        [HttpPost("upload-model")]
+        [DisableRequestSizeLimit, RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue,  ValueLengthLimit = int.MaxValue)]
+        public async Task<IActionResult> UploadModel([FromForm] string projectId, [FromForm] string sectionId,
             [FromForm] string modelId, [FromForm] IFormFile file)
         {
 
@@ -561,6 +579,48 @@ namespace ModelViewerEditor.Controllers
             ReorderProject(project);
 
             _dataService.Update(project);
+            return Ok();
+        }
+
+        [HttpPost("upload-thumb")]
+        [DisableRequestSizeLimit]
+        public async Task<IActionResult> UploadThumb([FromForm] string projectId, [FromForm] string sectionId,
+         [FromForm] string modelId, [FromForm] IFormFile file)
+        {
+
+            if (!projectId.IsObjectId()) return BadRequest("Project not found");
+
+            if (!sectionId.IsObjectId()) return BadRequest("Section not found");
+
+            if (!modelId.IsObjectId()) return BadRequest("Model not found");
+
+            var project = _dataService.Get(new ObjectId(projectId));
+            if (project == null) return BadRequest("Project not found");
+
+            var section = project.Sections.FirstOrDefault(x =>
+                string.Equals(x.Id.ToString(), sectionId, StringComparison.CurrentCultureIgnoreCase));
+            if (section == null) return BadRequest("Section not found");
+
+            var model = section.Models.FirstOrDefault(x =>
+                string.Equals(x.Id.ToString(), modelId, StringComparison.CurrentCultureIgnoreCase));
+            if (model == null) return BadRequest("Model not found");
+
+
+
+
+            if (file.Length <= 0) return BadRequest("File length is zero");
+            if (Path.GetExtension(file.FileName) != ".png")
+                return BadRequest("Incorrect file type (expecting .png file)");
+
+            var projectDir = Path.Join(_hostingEnvironment.WebRootPath, "models", projectId);
+            if (!Directory.Exists(projectDir))
+                Directory.CreateDirectory(projectDir);
+
+            var filePath = Path.Join(projectDir, modelId + ".png");
+
+            await using var stream = System.IO.File.Create(filePath);
+            await file.CopyToAsync(stream);
+
             return Ok();
         }
 

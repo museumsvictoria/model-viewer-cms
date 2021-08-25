@@ -53,6 +53,8 @@ export class ViewModelComponent implements OnInit {
 
   @ViewChild("hotspotForm") private hotspotForm!: HotspotFormComponent;
 
+  @ViewChild("modelViewer") private modelViewer!: ElementRef;
+
   projectId: string;
   sectionId: string;
   modelId: string;
@@ -68,7 +70,7 @@ export class ViewModelComponent implements OnInit {
   selectedHotspot: HotspotModel;
   fileUploaded = false;
   glbExists = false;
-
+  thumbExists = false;
   get modelSource(): string {
     return `${this.baseUrl}models/${this.projectId}/${this.modelId}.glb`;
   }
@@ -196,6 +198,34 @@ export class ViewModelComponent implements OnInit {
     }
   }
 
+  onModelViewerLoad() {
+    if (!this.project.id || !this.model.id) {
+      return;
+    }
+    this.dataService
+      .modelHasThumbnail(this.project.id, this.model.id)
+      .subscribe((thumbExists) => {
+        if (!thumbExists) {
+          this.uploadThumb();
+        }
+      });
+  }
+
+
+  private uploadThumb() {
+    console.log(this.modelViewer);
+    if (!(this.modelViewer && this.modelViewer.nativeElement.toBlob))
+      return;
+
+    console.log("uploading thumb");
+
+    this.modelViewer.nativeElement.toBlob().then(blob => this.resizeImage(blob, 400, 400).then(blob => {
+      this.dataService.uploadThumb(blob, this.project.id, this.sectionId, this.modelId).subscribe(); }
+      ))
+   
+
+  }
+
   private addHotspot(positionAndNormal: any) {
 
     const dialogRef = this.dialog.open(NewHotspotDialogComponent, {
@@ -315,7 +345,16 @@ export class ViewModelComponent implements OnInit {
     this.movingHotspot = false;
     this.editingHotspot = false;
     this.selectedHotspot = null;
-    console.log("onHotspotDeselect");
+  }
+
+  modelFileName(): string {
+    if (this.model.originalFileName) {
+      return this.model.originalFileName;
+    }
+    else {
+      return this.model.name + ".glb"
+    }
+
   }
 
   private loadProjectSectionModel(
@@ -368,12 +407,16 @@ export class ViewModelComponent implements OnInit {
       });
   }
 
+
+
   private round(n: number, precision: number) {
     var factor = Math.pow(10, precision);
     var tempNumber = n * factor;
     var roundedTempNumber = Math.round(tempNumber);
     return roundedTempNumber / factor;
   }
+
+
 
   updateHotspotText(text: string) {
     this.dataService
@@ -411,6 +454,44 @@ export class ViewModelComponent implements OnInit {
   viewList() {
     this.selectedHotspot = null;
   }
+
+
+  resizeImage(file:File, maxWidth:number, maxHeight:number):Promise<Blob> {
+    return new Promise((resolve, reject) => {
+        let image = new Image();
+        image.src = URL.createObjectURL(file);
+        image.onload = () => {
+            let width = image.width;
+            let height = image.height;
+            
+            if (width <= maxWidth && height <= maxHeight) {
+                resolve(file);
+            }
+
+            let newWidth;
+            let newHeight;
+
+            if (width > height) {
+                newHeight = height * (maxWidth / width);
+                newWidth = maxWidth;
+            } else {
+                newWidth = width * (maxHeight / height);
+                newHeight = maxHeight;
+            }
+
+            let canvas = document.createElement('canvas');
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+
+            let context = canvas.getContext('2d');
+
+            context.drawImage(image, 0, 0, newWidth, newHeight);
+
+            canvas.toBlob(resolve, file.type);
+        };
+        image.onerror = reject;
+    });
+}
 }
 
 
