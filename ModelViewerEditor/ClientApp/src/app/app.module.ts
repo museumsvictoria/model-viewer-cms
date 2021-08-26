@@ -41,6 +41,7 @@ import { RenameProjectDialogComponent } from './rename-project-dialog/rename-pro
 import { RenameSectionDialogComponent } from './rename-section-dialog/rename-section-dialog.component';
 import { RenameModelDialogComponent } from './rename-model-dialog/rename-model-dialog.component';
 import { MoveModelDialogComponent } from './move-model-dialog/move-model-dialog.component';
+import { ViewJsonDialogComponent } from './view-json-dialog/view-json-dialog.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { MoveModelDialogComponent } from './move-model-dialog/move-model-dialog.
     RenameSectionDialogComponent,
     RenameModelDialogComponent,
     MoveModelDialogComponent,
+    ViewJsonDialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -31,6 +31,7 @@ import { HotspotFormComponent } from "../hotspot-form/hotspot-form.component";
 import { RenameModelDialogComponent } from "../rename-model-dialog/rename-model-dialog.component";
 import { RenameProjectDialogComponent } from "../rename-project-dialog/rename-project-dialog.component";
 import { MoveModelDialogComponent } from "../move-model-dialog/move-model-dialog.component";
+import { ViewJsonDialogComponent } from "../view-json-dialog/view-json-dialog.component";
 
 @Component({
   selector: "app-view-model",
@@ -103,11 +104,9 @@ export class ViewModelComponent implements OnInit {
 
   onHotspotSelect(hotspot: HotspotModel) {
     this.selectedHotspot = hotspot;
-    // this.drawer.open();
   }
 
   closeDrawer() {
-    //this.drawer.close();
     this.addingHotspot = false;
     this.editingHotspot = false;
     this.selectedHotspot = null;
@@ -168,6 +167,27 @@ export class ViewModelComponent implements OnInit {
   }
 
 
+  onGetModelJson_click() {
+    this.dataService
+      .getModelJson(this.project.id, this.section.id, this.model.id)
+      .subscribe(
+        (json) => {
+          console.log(json);
+          let dialogRef = this.dialog.open(ViewJsonDialogComponent, {
+            height: '800px',
+            width: '800px',
+            data: json
+          });
+
+        },
+        (err) => {
+          this.confirmDialogService.showHttpError(err);
+        }
+      );
+
+
+  }
+
 
 
   onModelViewerClick(event: MouseEvent) {
@@ -220,9 +240,10 @@ export class ViewModelComponent implements OnInit {
     console.log("uploading thumb");
 
     this.modelViewer.nativeElement.toBlob().then(blob => this.resizeImage(blob, 400, 400).then(blob => {
-      this.dataService.uploadThumb(blob, this.project.id, this.sectionId, this.modelId).subscribe(); }
-      ))
-   
+      this.dataService.uploadThumb(blob, this.project.id, this.sectionId, this.modelId).subscribe();
+    }
+    ))
+
 
   }
 
@@ -456,42 +477,42 @@ export class ViewModelComponent implements OnInit {
   }
 
 
-  resizeImage(file:File, maxWidth:number, maxHeight:number):Promise<Blob> {
+  resizeImage(file: File, maxWidth: number, maxHeight: number): Promise<Blob> {
     return new Promise((resolve, reject) => {
-        let image = new Image();
-        image.src = URL.createObjectURL(file);
-        image.onload = () => {
-            let width = image.width;
-            let height = image.height;
-            
-            if (width <= maxWidth && height <= maxHeight) {
-                resolve(file);
-            }
+      let image = new Image();
+      image.src = URL.createObjectURL(file);
+      image.onload = () => {
+        let width = image.width;
+        let height = image.height;
 
-            let newWidth;
-            let newHeight;
+        if (width <= maxWidth && height <= maxHeight) {
+          resolve(file);
+        }
 
-            if (width > height) {
-                newHeight = height * (maxWidth / width);
-                newWidth = maxWidth;
-            } else {
-                newWidth = width * (maxHeight / height);
-                newHeight = maxHeight;
-            }
+        let newWidth;
+        let newHeight;
 
-            let canvas = document.createElement('canvas');
-            canvas.width = newWidth;
-            canvas.height = newHeight;
+        if (width > height) {
+          newHeight = height * (maxWidth / width);
+          newWidth = maxWidth;
+        } else {
+          newWidth = width * (maxHeight / height);
+          newHeight = maxHeight;
+        }
 
-            let context = canvas.getContext('2d');
+        let canvas = document.createElement('canvas');
+        canvas.width = newWidth;
+        canvas.height = newHeight;
 
-            context.drawImage(image, 0, 0, newWidth, newHeight);
+        let context = canvas.getContext('2d');
 
-            canvas.toBlob(resolve, file.type);
-        };
-        image.onerror = reject;
+        context.drawImage(image, 0, 0, newWidth, newHeight);
+
+        canvas.toBlob(resolve, file.type);
+      };
+      image.onerror = reject;
     });
-}
+  }
 }
 
 

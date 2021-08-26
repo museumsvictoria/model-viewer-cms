@@ -352,6 +352,18 @@ export class DataService {
     );
   }
 
+   getModelJson(
+    projectId: string,
+    sectionId: string,
+    modelId: string
+  ): Observable<any> {
+    return this.http.get(
+      `${this.baseUrl}get-model-json?projectId=${projectId}&sectionId=${sectionId}&modelId=${modelId}`, {responseType: 'text'}
+    );
+  }
+
+  
+
     listPngs(
     projectId: string
   ): Observable<string[]> {

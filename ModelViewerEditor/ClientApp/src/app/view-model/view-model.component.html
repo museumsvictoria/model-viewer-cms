@@ -22,6 +22,11 @@
       Relocate model
     </button>
     <a mat-button [href]="modelSource" [download]="modelFileName()">Download model</a>
+    <button (click)="onGetModelJson_click()"
+            mat-button
+            [disabled]="addingHotspot || editingHotspot || movingHotspot">
+      Show Json
+    </button>
     <button (click)="onNewHotspot_click()"
             mat-button
             [disabled]="addingHotspot || editingHotspot || movingHotspot">

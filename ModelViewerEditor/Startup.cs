@@ -28,6 +28,8 @@ namespace ModelViewerEditor
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddSingleton<IDbContext, DbContext>();
             services.AddTransient<IDataService, DataService>();
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddControllers()
                 .AddJsonOptions(options =>
                 {

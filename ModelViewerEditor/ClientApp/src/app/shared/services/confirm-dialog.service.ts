@@ -37,15 +37,16 @@ export class ConfirmDialogService {
 
   showHttpError(err: any) {
     let message = "";
-    if (err.hasOwnProperty("error")) {
-      if (err.error.hasOwnProperty("title")) {
-        message = err.error.title;
-      } else {
-        message = err.error;
-      }
-    } else {
-      message = err;
+    if (err.error && err.error.title) {
+         message = err.error.title;
     }
+    else if (err.error) {
+         message = err.error;
+    }
+     else if (err.message) {
+         message = err.message;
+    }
+
     this._snackBar.open(message, null, {
       duration: 3000,
       verticalPosition: "top",

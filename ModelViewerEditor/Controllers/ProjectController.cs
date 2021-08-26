@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using AutoMapper;
 using LiteDB;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -20,11 +23,12 @@ namespace ModelViewerEditor.Controllers
         #region Constructors
 
         public ProjectController(ILogger<ProjectController> logger, IDataService dataService,
-            IWebHostEnvironment hostingEnvironment)
+            IWebHostEnvironment hostingEnvironment, IMapper mapper)
         {
             _logger = logger;
             _dataService = dataService;
             _hostingEnvironment = hostingEnvironment;
+            _mapper = mapper;
         }
 
         #endregion Constructors
@@ -36,6 +40,8 @@ namespace ModelViewerEditor.Controllers
         private readonly IWebHostEnvironment _hostingEnvironment;
 
         private readonly ILogger<ProjectController> _logger;
+
+        private readonly IMapper _mapper;
 
         #endregion Fields
 
@@ -355,6 +361,42 @@ namespace ModelViewerEditor.Controllers
             return Ok(project);
         }
 
+        [HttpGet("get-model-json")]
+        public ActionResult<string> GetModelJson(string projectId, string sectionId, string modelId)
+        {
+            if (!projectId.IsObjectId()) return BadRequest("ProjectId not valid");
+
+            if (!sectionId.IsObjectId()) return BadRequest("SectionId not valid");
+
+            if (!modelId.IsObjectId()) return BadRequest("ModelId not valid");
+
+            var project = _dataService.Get(new ObjectId(projectId));
+            if (project == null) return BadRequest("Project not found");
+
+            var section = project.Sections.FirstOrDefault(x => x.Id.ToString() == sectionId);
+
+            if (section == null) return BadRequest("Section not found");
+
+            var model = section.Models.FirstOrDefault(x => x.Id.ToString() == modelId);
+
+            if (model == null) return BadRequest("Model not found");
+
+            var exportModel = _mapper.Map<ExportObjectModel>(model);
+
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string jsonString = System.Text.Json.JsonSerializer.Serialize(exportModel, options);
+
+            return Ok(jsonString);
+
+            //var fileName = "test.txt";
+            //var mimeType = "text/plain";
+            //var fileBytes = Encoding.ASCII.GetBytes(jsonString);
+            // return new FileContentResult(fileBytes, mimeType)
+            // {
+            //     FileDownloadName = fileName
+            // };
+        }
+
         [HttpGet("project-exists")]
         public ActionResult<bool> ProjectExists(string name)
         {
@@ -536,7 +578,7 @@ namespace ModelViewerEditor.Controllers
         }
 
         [HttpPost("upload-model")]
-        [DisableRequestSizeLimit, RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue,  ValueLengthLimit = int.MaxValue)]
+        [DisableRequestSizeLimit, RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue, ValueLengthLimit = int.MaxValue)]
         public async Task<IActionResult> UploadModel([FromForm] string projectId, [FromForm] string sectionId,
             [FromForm] string modelId, [FromForm] IFormFile file)
         {
