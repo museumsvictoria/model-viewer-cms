@@ -57,7 +57,7 @@
 
         <div *ngIf="model.hotspots.length && !addingHotspot && !selectedHotspot">
           <h4 class="hotspot-list-title">Hotspots</h4>
-          <app-list-hotspots [model]="model" (selectHotspot)="onListSelectHotspot($event)" (goToHotspot)="onListGotoHotspot($event)"></app-list-hotspots>
+          <app-list-hotspots [model]="model" (selectHotspot)="onListSelectHotspot($event)"></app-list-hotspots>
         </div>
 
 

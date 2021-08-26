@@ -279,7 +279,8 @@ export class DataService {
     modelId: string,
     hotspotId: string,
     position: string,
-    normal: string
+    normal: string,
+    cameraOrbit: string
   ): Observable<HotspotModel> {
     if (!projectId) {
       return throwError("ProjectId is null");
@@ -299,7 +300,7 @@ export class DataService {
     if (!normal) {
       return throwError("normal is empty");
     }
-    const body = { projectId, sectionId, modelId, hotspotId, position, normal };
+    const body = { projectId, sectionId, modelId, hotspotId, position, normal, cameraOrbit };
     console.log(body);
     return this.http.post<any>(
       `${this.baseUrl}update-hotspot-position`,

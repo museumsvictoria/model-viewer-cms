@@ -10,6 +10,7 @@ import { AppHeadingService } from "../shared/services/app-heading.service";
 import { MatSelectionListChange } from "@angular/material/list";
 import { NewSectionDialogComponent } from "../new-section-dialog/new-section-dialog.component";
 import { RenameProjectDialogComponent } from "../rename-project-dialog/rename-project-dialog.component";
+import { CookieService } from "ngx-cookie-service";
 
 @Component({
   selector: "app-view-project",
@@ -18,6 +19,7 @@ import { RenameProjectDialogComponent } from "../rename-project-dialog/rename-pr
 })
 export class ViewProjectComponent implements OnInit {
   constructor(
+    private cookieService: CookieService,
     private route: ActivatedRoute,
     private _router: Router,
     private dataService: DataService,
@@ -37,6 +39,8 @@ export class ViewProjectComponent implements OnInit {
     } else {
       this.loadProject(this.idFromRoute);
     }
+
+    
   }
 
   private loadProject(idFromRoute: string) {

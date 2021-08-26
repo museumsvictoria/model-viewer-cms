@@ -32,6 +32,7 @@ import { RenameModelDialogComponent } from "../rename-model-dialog/rename-model-
 import { RenameProjectDialogComponent } from "../rename-project-dialog/rename-project-dialog.component";
 import { MoveModelDialogComponent } from "../move-model-dialog/move-model-dialog.component";
 import { ViewJsonDialogComponent } from "../view-json-dialog/view-json-dialog.component";
+import { Utils } from "../shared/services/utils";
 
 @Component({
   selector: "app-view-model",
@@ -200,15 +201,31 @@ export class ViewModelComponent implements OnInit {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
     const positionAndNormal = viewer.positionAndNormalFromPoint(x, y);
+
+    let orbit = viewer.getCameraOrbit();
+    // let thetaAbsolute = `${Utils.round(Utils.getDegrees(orbit.theta, true), 3)}`;
+    let thetaRelative = `${Utils.round(Utils.getDegrees(orbit.theta, false) % 360, 3)}`;
+    // let phiAbsolute = `${Utils.round(Utils.getDegrees(orbit.phi, true), 3)}`;
+    let phiRelative = `${Utils.round(Utils.getDegrees(orbit.phi, false) % 360, 3)}`;
+    let distance = `${Utils.round(orbit.radius, 3)}`;
+
+    let cameraOrbit = `${thetaRelative}deg ${phiRelative}deg ${distance}m`;
+
+
     if (positionAndNormal == null) {
     }
     else {
       if (this.addingHotspot) {
-        this.addHotspot(positionAndNormal);
+
+
+
+
+
+        this.addHotspot(positionAndNormal, cameraOrbit);
         this.addingHotspot = false;
       }
       else if (this.movingHotspot) {
-        this.moveHotspot(positionAndNormal.position, positionAndNormal.normal);
+        this.moveHotspot(positionAndNormal.position, positionAndNormal.normal, cameraOrbit);
         if (this.hotspotForm) {
           this.hotspotForm.moveComplete();
         }
@@ -247,7 +264,7 @@ export class ViewModelComponent implements OnInit {
 
   }
 
-  private addHotspot(positionAndNormal: any) {
+  private addHotspot(positionAndNormal: any, cameraOrbit: string) {
 
     const dialogRef = this.dialog.open(NewHotspotDialogComponent, {
       height: "400px",
@@ -261,7 +278,8 @@ export class ViewModelComponent implements OnInit {
       const newHotspot = this.makeHotspot(
         positionAndNormal.position,
         positionAndNormal.normal,
-        text
+        text,
+        cameraOrbit
       );
 
       this.dataService.addHotspot(newHotspot).subscribe((hotspot) => {
@@ -271,7 +289,7 @@ export class ViewModelComponent implements OnInit {
     });
   }
 
-  private moveHotspot(position, normal) {
+  private moveHotspot(position, normal, cameraOrbit: string) {
     this.movingHotspotId = this.selectedHotspot.id;
     this.dataService
       .updateHotspotPosition(
@@ -280,12 +298,14 @@ export class ViewModelComponent implements OnInit {
         this.model.id,
         this.selectedHotspot.id,
         `${position.x} ${position.y} ${position.z}`,
-        `${normal.x} ${normal.y}  ${normal.z}`
+        `${normal.x} ${normal.y}  ${normal.z}`,
+        cameraOrbit
       )
       .subscribe(
         (hs) => {
           this.selectedHotspot.dataPosition = hs.dataPosition;
           this.selectedHotspot.dataNormal = hs.dataNormal;
+          this.selectedHotspot.cameraOrbit = hs.cameraOrbit;
           this.movingHotspotId = null;
         },
         (err) => {
@@ -297,7 +317,7 @@ export class ViewModelComponent implements OnInit {
 
 
 
-  private makeHotspot(position, normal, text) {
+  private makeHotspot(position, normal, text, cameraOrbit) {
     const newHotspot = new NewHotspotModel();
     newHotspot.projectId = this.project.id;
     newHotspot.sectionId = this.section.id;
@@ -305,7 +325,7 @@ export class ViewModelComponent implements OnInit {
     newHotspot.text = text;
     newHotspot.dataPosition = `${position.x} ${position.y} ${position.z}`;
     newHotspot.dataNormal = `${normal.x} ${normal.y}  ${normal.z}`;
-    newHotspot.cameraOrbit = "";
+    newHotspot.cameraOrbit = cameraOrbit;
     newHotspot.fieldOfView = "";
     return newHotspot;
   }
@@ -468,6 +488,8 @@ export class ViewModelComponent implements OnInit {
 
   onListSelectHotspot(hs: HotspotModel) {
     this.selectedHotspot = hs;
+    if (hs.cameraOrbit)
+      this.modelViewer.nativeElement.cameraOrbit = hs.cameraOrbit;
   }
 
   onListGotoHotspot($event: HotspotModel) { }

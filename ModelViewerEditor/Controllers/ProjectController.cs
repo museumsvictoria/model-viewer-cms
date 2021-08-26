@@ -515,32 +515,32 @@ namespace ModelViewerEditor.Controllers
         }
 
         [HttpPost("update-hotspot-position")]
-        public ActionResult<HotspotModel> UpdateHotspotPosition(HotspotUpdatePositionDto updateText)
+        public ActionResult<HotspotModel> UpdateHotspotPosition(HotspotUpdatePositionDto positionDto)
         {
-            if (!updateText.ProjectId.IsObjectId()) return BadRequest("Project not found");
+            if (!positionDto.ProjectId.IsObjectId()) return BadRequest("Project not found");
 
-            if (!updateText.SectionId.IsObjectId()) return BadRequest("Section not found");
+            if (!positionDto.SectionId.IsObjectId()) return BadRequest("Section not found");
 
-            if (!updateText.ModelId.IsObjectId()) return BadRequest("Model not found");
+            if (!positionDto.ModelId.IsObjectId()) return BadRequest("Model not found");
 
-            var project = _dataService.Get(new ObjectId(updateText.ProjectId));
+            var project = _dataService.Get(new ObjectId(positionDto.ProjectId));
             if (project == null) return BadRequest("Project not found");
 
             var section = project.Sections.FirstOrDefault(x =>
-                string.Equals(x.Id.ToString(), updateText.SectionId, StringComparison.CurrentCultureIgnoreCase));
+                string.Equals(x.Id.ToString(), positionDto.SectionId, StringComparison.CurrentCultureIgnoreCase));
             if (section == null) return BadRequest("Section not found");
 
             var model = section.Models.FirstOrDefault(x =>
-                string.Equals(x.Id.ToString(), updateText.ModelId, StringComparison.CurrentCultureIgnoreCase));
+                string.Equals(x.Id.ToString(), positionDto.ModelId, StringComparison.CurrentCultureIgnoreCase));
             if (model == null) return BadRequest("Model not found");
             var hotspot = model.Hotspots.FirstOrDefault(x =>
-                string.Equals(x.Id.ToString(), updateText.HotspotId, StringComparison.CurrentCultureIgnoreCase));
+                string.Equals(x.Id.ToString(), positionDto.HotspotId, StringComparison.CurrentCultureIgnoreCase));
 
             if (hotspot == null) return BadRequest("Hotspot not found");
 
-            hotspot.DataPosition = updateText.Position;
-            hotspot.DataNormal = updateText.Normal;
-
+            hotspot.DataPosition = positionDto.Position;
+            hotspot.DataNormal = positionDto.Normal;
+            hotspot.CameraOrbit = positionDto.cameraOrbit;
             _dataService.Update(project);
 
             return hotspot;

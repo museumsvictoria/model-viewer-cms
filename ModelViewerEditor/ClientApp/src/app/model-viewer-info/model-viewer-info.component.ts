@@ -31,10 +31,10 @@ export class ModelViewerInfoComponent implements AfterViewInit {
   updateCameraInfo() {
 
     this.orbit = this.viewer.getCameraOrbit();
-    this.thetaAbsolute= `${Utils.round(ModelViewerInfoComponent.getDegrees( this.orbit.theta, true), 3)}`;
-    this.thetaRelative = `${Utils.round(ModelViewerInfoComponent.getDegrees( this.orbit.theta, false) % 360, 3)}`;
-    this.phiAbsolute = `${Utils.round(ModelViewerInfoComponent.getDegrees( this.orbit.phi, true), 3)}`;
-    this.phiRelative = `${Utils.round(ModelViewerInfoComponent.getDegrees( this.orbit.phi, false) % 360, 3)}`;
+    this.thetaAbsolute= `${Utils.round(Utils.getDegrees( this.orbit.theta, true), 3)}`;
+    this.thetaRelative = `${Utils.round(Utils.getDegrees( this.orbit.theta, false) % 360, 3)}`;
+    this.phiAbsolute = `${Utils.round(Utils.getDegrees( this.orbit.phi, true), 3)}`;
+    this.phiRelative = `${Utils.round(Utils.getDegrees( this.orbit.phi, false) % 360, 3)}`;
     this.distance =`${Utils.round( this.orbit.radius, 3)}`;
     this.fov = `${Utils.round(this.viewer.getFieldOfView(), 3)}`;
 
@@ -42,25 +42,7 @@ export class ModelViewerInfoComponent implements AfterViewInit {
 
 
 
-  private static getDegrees(r: number, absolute: boolean): number {
-    let degrees = r * 180 / Math.PI;
-
-    if (absolute)
-      return degrees;
-
-
-
-    if (degrees == 360 || degrees == -360)
-      degrees = 0;
-
-    if (degrees > 360 || degrees < -360)
-      degrees = degrees % 360;
-
-    if (degrees < 0)
-      degrees = 360 + degrees;
-
-    return degrees;
-  }
+  
 
 
 
